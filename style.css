@@ -32,6 +32,79 @@
     border-radius: 12px;
 }
 
+/* Obere Zeile: Linse und Ampellichter */
+.header-top {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.big-blue-lens {
+    width: 48px;
+    height: 48px;
+
+    position: relative;
+    flex-shrink: 0;
+
+    background: radial-gradient(circle at 30% 30%, #70f3ff 0%, #00a8cc 40%, #005f73 100%);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.7);
+
+    border-radius: 50%;
+    border: 3px solid #ffffff;
+
+    margin-bottom: 32px;
+}
+
+.lens-reflection {
+    width: 10px;
+    height: 5px;
+
+    position: absolute;
+    top: 7px;
+    left: 7px;
+
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 50%;
+
+    transform: rotate(-45deg);
+}
+
+.traffic-lights {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 56px;
+}
+
+.light {
+    width: 12px;
+    height: 12px;
+
+    border-radius: 50%;
+    border: 1.5px solid rgba(0, 0, 0, 0.4);
+
+    box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.6), 0 2px 3px rgba(0, 0, 0, 0.3);
+}
+
+.light.red {
+    background: radial-gradient(circle at 30% 30%, #ff6b6b 0%, #d90429 100%);
+}
+
+.light.yellow {
+    background: radial-gradient(circle at 30% 30%, #ffd166 0%, #ffb703 100%);
+}
+
+.light.green {
+    background: radial-gradient(circle at 30% 30%, #8ac926 0%, #38b000 100%);
+}
+
+.header-bottom {
+    padding-left: 26px;
+}
+
+.header-bottom h1 {
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
 .pokedex-screen {
     flex: 1;
 

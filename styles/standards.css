@@ -19,3 +19,10 @@ header {
 
     height: 64px;
 }
+
+h1 {
+    font-family: 'Titan One';
+    font-size: clamp(2.5rem, 5vw + 1rem, 3.5rem);
+    font-weight: 200;
+    color: white;
+}
