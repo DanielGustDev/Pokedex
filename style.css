@@ -157,3 +157,36 @@ header {
 
     border-radius: 6px;
 }
+
+.pokemon-card {
+    position: relative;
+
+    height: 300px;
+    width: 200px;
+
+    margin: 32px;
+
+    background-color: #00a8cc;
+
+    border: 4px solid silver;
+    border-radius: 6px;
+
+    cursor: pointer;
+
+    overflow: hidden;
+}
+
+.pokemon-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+
+    background: linear-gradient(115deg, #0000 40%, #ffffff40 50%, #0000 60%);
+
+    translate: -100% 0;
+    transition: translate 0.8s ease;
+}
+
+.pokemon-card:hover::after {
+    translate: 100% 0;
+}
