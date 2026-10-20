@@ -1,6 +1,6 @@
 :root {
-    --font-primary: ;
-    --accent: ;
+    --font-primary: rgb(255, 255, 255);
+    --accent: rgb(112, 243, 255);
     --background-primary: rgb(17, 18, 30);
     --background-secondary: rgb(202, 5, 28);
     --border: ;
