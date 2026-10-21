@@ -1,1 +1,1 @@
-## My first Pokedex, using th Poke-API.
+## My first Pokédex, using th Poké-API.
