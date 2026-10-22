@@ -20,7 +20,18 @@ body {
 
 h1 {
     font-family: 'Titan One';
-    font-size: clamp(2.5rem, 5vw + 1rem, 3.5rem);
+    font-size: 4rem;
     font-weight: 200;
+    color: white;
+}
+
+h2 {
+    font-family: 'Press Start 2P';
+    font-size: 2rem;
+    color: white;
+}
+
+p {
+    font-family: 'Press Start 2P';
     color: white;
 }
