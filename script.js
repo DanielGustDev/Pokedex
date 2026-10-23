@@ -26,7 +26,36 @@ async function renderPokemonList(pokemonList) {
 
 async function fetchPokemonDetails(url) {
   let response = await fetch(url);
-  return await response.json();
+  let pokemon = await response.json();
+
+  pokemon.typeIcons = await loadIcons(pokemon.types);
+
+  return pokemon;
+}
+
+async function loadIcons(typesArray) {
+  let typePromises = typesArray.map((typeInfo) =>
+    fetchSingleType(typeInfo.type.url),
+  );
+
+  return await Promise.all(typePromises);
+}
+
+async function fetchSingleType(typeUrl) {
+  let response = await fetch(typeUrl);
+  let typeData = await response.json();
+
+  return {
+    name: typeData.name,
+    icon: extractIconUrl(typeData),
+  };
+}
+
+function extractIconUrl(typeData) {
+  return (
+    typeData.sprites?.["generation-ix"]?.["scarlet-violet"]?.["symbol_icon"] ||
+    ""
+  );
 }
 
 function loadMorePokemon() {

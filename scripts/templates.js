@@ -8,6 +8,9 @@ function createPokemonCardHTML(poke) {
                     <h2>${poke.name}</h2>
                 </div>
                     <img src="${poke.sprites.front_default}" alt="${poke.name}">
+                <div class="type-container">
+                    ${renderTypeIcons(poke.typeIcons)}
+                </div>
     </button>
     `;
 }
@@ -18,9 +21,23 @@ function createPokemonDetailHTML(poke) {
         <p>#${poke.id}</p>
         <h3>${poke.name}</h3>
         <img src="${poke.sprites.front_default}" alt="${poke.name}">
+        <div class="type-container">
+            ${renderTypeIcons(poke.typeIcons)}
+        </div>
         <p>Height: ${poke.height}</p>
         <p>Gewicht: ${poke.weight}</p>
         <button onclick="closeModal()">Close</button>
     </div>
     `;
+}
+
+function renderTypeIcons(typeIcons) {
+  if (!typeIcons) return "";
+
+  return typeIcons
+    .map(
+      (type) => `
+  <img class="type-icon" src="${type.icon}" alt="${type.name}">`,
+    )
+    .join("");
 }
