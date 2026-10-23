@@ -20,18 +20,28 @@ body {
 
 h1 {
     font-family: 'Titan One';
-    font-size: 4rem;
+    font-size: clamp(2.5rem, 5vw + 1rem, 4rem);
     font-weight: 200;
     color: white;
 }
 
 h2 {
     font-family: 'Press Start 2P';
-    font-size: 2rem;
+    font-size: 1.25rem;
     color: white;
+}
+
+h3 {
+    font-family: 'Press Start 2P';
+    font-size: 1.2rem;
 }
 
 p {
     font-family: 'Press Start 2P';
     color: white;
+}
+
+.pokemon-card h2,
+.detail-content h3 {
+    text-transform: capitalize;
 }

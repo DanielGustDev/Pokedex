@@ -2,10 +2,25 @@
 
 function createPokemonCardHTML(poke) {
   return `
-  <button class="pokemon-card">
-                    <span>#${poke.id}</span>
+  <button class="pokemon-card" onclick='openPokemonModal(${JSON.stringify(poke)})'>
+                <div class="title">
+                    <p>#${poke.id}</p>
                     <h2>${poke.name}</h2>
+                </div>
                     <img src="${poke.sprites.front_default}" alt="${poke.name}">
-                </button>
+    </button>
+    `;
+}
+
+function createPokemonDetailHTML(poke) {
+  return `
+    <div class="detail-content">
+        <p>#${poke.id}</p>
+        <h3>${poke.name}</h3>
+        <img src="${poke.sprites.front_default}" alt="${poke.name}">
+        <p>Height: ${poke.height}</p>
+        <p>Gewicht: ${poke.weight}</p>
+        <button onclick="closeModal()">Close</button>
+    </div>
     `;
 }

@@ -32,3 +32,17 @@ async function fetchPokemonDetails(url) {
 function loadMorePokemon() {
   loadData();
 }
+
+function openPokemonModal(poke) {
+  let dialog = document.getElementById("pokemon_dialog");
+  let modalBody = document.getElementById("modal_body");
+
+  modalBody.innerHTML = createPokemonDetailHTML(poke);
+
+  dialog.showModal();
+}
+
+function closeModal() {
+  let dialog = document.getElementById("pokemon_dialog");
+  dialog.close();
+}

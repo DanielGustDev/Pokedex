@@ -64,7 +64,9 @@
             </section>
             <button onclick="loadMorePokemon()" class="load-more-btn">Load More</button>
         </main>
-
+        <dialog id="pokemon_dialog" class="pokemon-dialog" onclick="this.close()">
+            <div id="modal_body" onclick="event.stopPropagation()"></div>
+        </dialog>
         <footer></footer>
     </div>
 </body>
