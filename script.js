@@ -30,7 +30,23 @@ async function fetchPokemonDetails(url) {
 
   pokemon.typeIcons = await loadIcons(pokemon.types);
 
+  let speciesData = await fetchPokemonSpecies(pokemon.species.url);
+  pokemon.flavorText = extractFlavorText(speciesData);
+
   return pokemon;
+}
+
+function formatDecimal(value) {
+  return value.toString().replace(".", ",");
+}
+function convertToMeters(height) {
+  let meters = (height / 10).toFixed(1);
+  return formatDecimal(meters);
+}
+
+function convertToKg(weight) {
+  let kg = (weight / 10).toFixed(1);
+  return formatDecimal(kg);
 }
 
 async function loadIcons(typesArray) {
@@ -56,6 +72,18 @@ function extractIconUrl(typeData) {
     typeData.sprites?.["generation-ix"]?.["scarlet-violet"]?.["symbol_icon"] ||
     ""
   );
+}
+
+async function fetchPokemonSpecies(speciesUrl) {
+  let response = await fetch(speciesUrl);
+  return await response.json();
+}
+
+function extractFlavorText(speciesData) {
+  let rawText =
+    speciesData.flavor_text_entries?.[0]?.flavor_text ||
+    "No Pokedédex entry found.";
+  return rawText.replace(/[\n\f]/g, " ");
 }
 
 function loadMorePokemon() {

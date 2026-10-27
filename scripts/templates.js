@@ -24,8 +24,9 @@ function createPokemonDetailHTML(poke) {
         <div class="type-container">
             ${renderTypeIcons(poke.typeIcons)}
         </div>
-        <p>Height: ${poke.height}</p>
-        <p>Gewicht: ${poke.weight}</p>
+        <p>Height: ${convertToMeters(poke.height)}m</p>
+        <p>Weight: ${convertToKg(poke.weight)}kg</p>
+        <p class="entry-text">${poke.flavorText}</p>
         <button onclick="closeModal()">Close</button>
     </div>
     `;
