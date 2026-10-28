@@ -247,14 +247,6 @@ header {
     padding: 24px;
 }
 
-.title {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    gap: 8px;
-}
-
 footer {
     display: flex;
     justify-content: center;

@@ -100,7 +100,7 @@ function openPokemonModal(index) {
   let modalBody = document.getElementById("modal_body");
   let poke = loadedPokemon[index];
 
-  modalBody.innerHTML = createPokemonDetailHTML(poke);
+  modalBody.innerHTML = createPokemonDialogHTML(poke);
 
   dialog.showModal();
 }

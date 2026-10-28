@@ -34,7 +34,6 @@ h1 {
 h2 {
     font-family: 'Press Start 2P';
     font-size: 1.25rem;
-    color: white;
 }
 
 h3 {
@@ -44,7 +43,6 @@ h3 {
 
 p {
     font-family: 'Press Start 2P';
-    color: white;
 }
 
 .pokemon-card h2,

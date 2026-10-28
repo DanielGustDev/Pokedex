@@ -3,12 +3,10 @@
 .pokemon-card {
     position: relative;
 
-    height: 360px;
+    height: 390px;
     width: 280px;
 
-    background-color: rgb(0, 168, 204);
-
-    border: 4px solid silver;
+    border: var(--border);
     border-radius: 6px;
 
     cursor: pointer;
@@ -16,6 +14,112 @@
     overflow: hidden;
 
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.pokemon-card.type-normal {
+    background-color: rgb(209, 204, 202);
+}
+
+.pokemon-card.type-fire {
+    background-color: rgb(222, 98, 52);
+}
+
+.pokemon-card.type-water {
+    background-color: rgb(11, 138, 178);
+}
+
+.pokemon-card.type-grass {
+    background-color: rgb(106, 158, 0);
+}
+
+.pokemon-card.type-electric {
+    background-color: rgb(247, 224, 36);
+}
+
+.pokemon-card.type-ice {
+    background-color: rgb(169, 197, 197);
+}
+
+.pokemon-card.type-fighting {
+    background-color: rgb(153, 67, 2);
+}
+
+.pokemon-card.type-poison {
+    background-color: rgb(120, 55, 116);
+}
+
+.pokemon-card.type-ground {
+    background-color: rgb(211, 189, 151);
+}
+
+.pokemon-card.type-flying {
+    background-color: rgb(243, 243, 242);
+}
+
+.pokemon-card.type-psychic {
+    background-color: rgb(225, 21, 130);
+}
+
+.pokemon-card.type-bug {
+    background-color: rgb(153, 147, 71);
+}
+
+.pokemon-card.type-rock {
+    background-color: rgb(124, 86, 49);
+}
+
+.pokemon-card.type-ghost {
+    background-color: rgb(100, 96, 128);
+}
+
+.pokemon-card.type-dragon {
+    background-color: rgb(37, 83, 106);
+}
+
+.pokemon-card.type-dark {
+    background-color: rgb(61, 67, 71);
+}
+
+.pokemon-card.type-steel {
+    background-color: rgb(141, 170, 191);
+}
+
+.pokemon-card.type-fairy {
+    background-color: rgb(247, 189, 201);
+}
+
+.title {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+
+    margin-top: 8px;
+    margin-bottom: 8px;
+    padding: 6px;
+
+    color: var(--font-secondary);
+    background-color: white;
+
+    border: var(--border);
+}
+
+.pokemon-card img {
+    width: 240px;
+
+    background-color: var(--background-tertiary);
+
+    border: var(--border);
+}
+
+.type-container img {
+    width: 56px;
+
+    margin-top: 8px;
+
+    border: var(--border);
+    border-radius: 50%;
 }
 
 .pokemon-card::after {
@@ -53,8 +157,8 @@
 
     color: white;
 
-    max-width: 400px;
-    width: 80%;
+    max-width: 800px;
+    width: 60vw;
 
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
@@ -62,6 +166,36 @@
 .pokemon-dialog::backdrop {
     background-color: transparent;
     backdrop-filter: blur(6px);
+}
+
+.modal-body {
+    display: flex;
+}
+
+.dialog-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.dialog-title {
+    display: flex;
+    gap: 8px;
+}
+
+.detail-images {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.detail-images>img {
+    width: 340px;
+}
+
+.type-container {
+    display: flex;
+    justify-content: center;
 }
 
 /* Other Elements */

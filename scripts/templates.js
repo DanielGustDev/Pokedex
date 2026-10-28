@@ -1,34 +1,54 @@
 // @ts-nocheck
 
+function getPokemonData(poke) {
+  return {
+    id: poke.id,
+    name: poke.name,
+    image: poke.sprites.front_default,
+    primaryType: poke.types[0].type.name,
+    typeIconsHTML: renderTypeIcons(poke.typeIcons),
+  };
+}
+
 function createPokemonCardHTML(poke, index) {
+  let cardData = getPokemonData(poke);
+
   return `
-  <button class="pokemon-card" onclick='openPokemonModal(${index})'>
+  <button class="pokemon-card type-${cardData.primaryType}" onclick='openPokemonModal(${index})'>
                 <div class="title">
-                    <p>#${poke.id}</p>
-                    <h2>${poke.name}</h2>
+                    <p>#${cardData.id}</p>
+                    <h2>${cardData.name}</h2>
                 </div>
-                    <img src="${poke.sprites.front_default}" alt="${poke.name}">
+                    <img src="${cardData.image}" alt="${cardData.name}">
                 <div class="type-container">
-                    ${renderTypeIcons(poke.typeIcons)}
+                    ${cardData.typeIconsHTML}
                 </div>
     </button>
     `;
 }
 
-function createPokemonDetailHTML(poke) {
+function createPokemonDialogHTML(poke) {
   return `
-    <div class="detail-content">
-        <p>#${poke.id}</p>
-        <h3>${poke.name}</h3>
-        <img src="${poke.sprites.front_default}" alt="${poke.name}">
-        <div class="type-container">
-            ${renderTypeIcons(poke.typeIcons)}
+    <section class="detail-content">
+        <div class="dialog-top">
+            <div class="dialog-title">
+                <p>#${poke.id}</p>
+                <h3>${poke.name}</h3>
+            </div>
+            <button onclick="closeModal()">Close</button>
         </div>
-        <p>Height: ${convertToMeters(poke.height)}m</p>
-        <p>Weight: ${convertToKg(poke.weight)}kg</p>
+        <div class="detail-images">
+            <img src="${poke.sprites.front_default}" alt="${poke.name}">
+            <div class="type-container">
+                ${renderTypeIcons(poke.typeIcons)}
+            </div>
+        </div>
         <p class="entry-text">${poke.flavorText}</p>
-        <button onclick="closeModal()">Close</button>
-    </div>
+        <div class="dialog-details">
+            <p>Height: ${convertToMeters(poke.height)}m</p>
+            <p>Weight: ${convertToKg(poke.weight)}kg</p>
+        </div>
+    </section >
     `;
 }
 
