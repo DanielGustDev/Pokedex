@@ -1,8 +1,8 @@
 // @ts-nocheck
 
-function createPokemonCardHTML(poke) {
+function createPokemonCardHTML(poke, index) {
   return `
-  <button class="pokemon-card" onclick='openPokemonModal(${JSON.stringify(poke)})'>
+  <button class="pokemon-card" onclick='openPokemonModal(${index})'>
                 <div class="title">
                     <p>#${poke.id}</p>
                     <h2>${poke.name}</h2>

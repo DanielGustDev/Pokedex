@@ -3,6 +3,7 @@
 const BASE_URL = "https://pokeapi.co/api/v2/pokemon/";
 let currentOffset = 0;
 let currentLimit = 20;
+let loadedPokemon = [];
 
 async function loadData() {
   let url = `${BASE_URL}?limit=${currentLimit}&offset=${currentOffset}`;
@@ -20,7 +21,11 @@ async function renderPokemonList(pokemonList) {
 
   for (let i = 0; i < pokemonList.length; i++) {
     let pokemonData = await fetchPokemonDetails(pokemonList[i].url);
-    cardGrid.innerHTML += createPokemonCardHTML(pokemonData);
+
+    loadedPokemon.push(pokemonData);
+    let index = loadedPokemon.length - 1;
+
+    cardGrid.innerHTML += createPokemonCardHTML(pokemonData, index);
   }
 }
 
@@ -90,9 +95,10 @@ function loadMorePokemon() {
   loadData();
 }
 
-function openPokemonModal(poke) {
+function openPokemonModal(index) {
   let dialog = document.getElementById("pokemon_dialog");
   let modalBody = document.getElementById("modal_body");
+  let poke = loadedPokemon[index];
 
   modalBody.innerHTML = createPokemonDetailHTML(poke);
 

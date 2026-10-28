@@ -51,7 +51,8 @@
             </div>
 
             <div class="header-bottom">
-                <input type="text" class="pokedex-search" placeholder="search Pokémon...">
+                <input type="text" class="pokedex-search" placeholder="find Pokémon...">
+                <button class="search-button">Search</button>
             </div>
 
             <svg class="header-step-line" viewBox="0 0 500 110" preserveAspectRatio="none">
@@ -62,12 +63,13 @@
         <main class="pokedex-screen">
             <section class="card-grid">
             </section>
-            <button onclick="loadMorePokemon()" class="load-more-btn">Load More</button>
         </main>
         <dialog id="pokemon_dialog" class="pokemon-dialog" onclick="this.close()">
             <div id="modal_body" onclick="event.stopPropagation()"></div>
         </dialog>
-        <footer></footer>
+        <footer>
+            <button onclick="loadMorePokemon()" class="load-more-button">Load More</button>
+        </footer>
     </div>
 </body>
 
