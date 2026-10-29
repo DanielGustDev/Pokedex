@@ -27,7 +27,18 @@ function createPokemonCardHTML(poke, index) {
     `;
 }
 
-function createPokemonDialogHTML(poke) {
+function renderTypeIcons(typeIcons) {
+  if (!typeIcons) return "";
+
+  return typeIcons
+    .map(
+      (type) => `
+  <img class="type-icon" src="${type.icon}" alt="${type.name}">`,
+    )
+    .join("");
+}
+
+function createPokemonDialogHTML(poke, index) {
   return `
     <section>
                 <div class="dialog-top">
@@ -44,24 +55,65 @@ function createPokemonDialogHTML(poke) {
                     <div class="detail-infos">
                         <h4>Description: </h4>
                         <p class="entry-text">${poke.flavorText}</p>
-                        <div class="dialog-details">
-                            <P>Type: ${renderTypeNames(poke.typeIcons)}</p>
-                            <p>Height: ${convertToMeters(poke.height)}m</p>
-                            <p>Weight: ${convertToKg(poke.weight)}kg</p>
+                        <nav class="dialog-navbar">
+                            <button onclick="showDetails(${index})">Details</button>
+                            <button onclick="showStats(${index})">Stats</button>
+                            <button onclick="showCall(${index})">Call</button>
+                        </nav>
+                        <div id="dialog_detail_container">
+                            ${getDetailsHTML(poke)}
                         </div>
                     </div>
                 </div>
-    </section>
+            </section>
     `;
 }
 
-function renderTypeIcons(typeIcons) {
-  if (!typeIcons) return "";
+function getDetailsHTML(poke) {
+  return `
+    <table class="dialog-details">
+        <tr>
+            <th>Type:</th>
+            <td>${renderTypeNames(poke.typeIcons)}</td>
+        </tr>
+        <tr>
+            <th>Height:</th>
+            <td>${convertToMeters(poke.height)}m</td>
+        </tr>
+        <tr>
+            <th>Weight:</th>
+            <td>${convertToKg(poke.weight)}kg</td>
+        </tr>
+    </table>
+    `;
+}
 
-  return typeIcons
+function getStatsHTML(poke) {
+  let statsRows = poke.stats
     .map(
-      (type) => `
-  <img class="type-icon" src="${type.icon}" alt="${type.name}">`,
+      (statObject) => `
+            <tr>
+                <th>${statObject.stat.name.toUpperCase()}:</th>
+                <td>${statObject.base_stat}</td>
+            </tr>
+        `,
     )
     .join("");
+
+  return `
+        <table class="dialog-details"
+            ${statsRows}
+        </table>
+    `;
+}
+
+function getCallHTML(poke) {
+  let cryUrl = poke.cries?.latest || "";
+
+  return `
+        <div class="dialog-callbox dialog-details">
+            <p>Listen to Pokèmon Call: </p>
+            ${cryUrl ? `<audio controls src="${cryUrl}"></audio>` : "<p>No Call known</p>"}
+        </div>
+    `;
 }

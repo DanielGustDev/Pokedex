@@ -108,7 +108,7 @@ function openPokemonModal(index) {
   let modalBody = document.getElementById("modal_body");
   let poke = loadedPokemon[index];
 
-  modalBody.innerHTML = createPokemonDialogHTML(poke);
+  modalBody.innerHTML = createPokemonDialogHTML(poke, index);
 
   dialog.showModal();
 }
@@ -116,4 +116,22 @@ function openPokemonModal(index) {
 function closeModal() {
   let dialog = document.getElementById("pokemon_dialog");
   dialog.close();
+}
+
+function showDetails(index) {
+  let poke = loadedPokemon[index];
+  document.getElementById("dialog_detail_container").innerHTML =
+    getDetailsHTML(poke);
+}
+
+function showStats(index) {
+  let poke = loadedPokemon[index];
+  document.getElementById("dialog_detail_container").innerHTML =
+    getStatsHTML(poke);
+}
+
+function showCall(index) {
+  let poke = loadedPokemon[index];
+  document.getElementById("dialog_detail_container").innerHTML =
+    getCallHTML(poke);
 }
