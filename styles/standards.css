@@ -33,7 +33,7 @@ h1 {
 
 h2 {
     font-family: 'Press Start 2P';
-    font-size: 1.25rem;
+    font-size: 1.2rem;
 }
 
 h3 {
@@ -41,11 +41,19 @@ h3 {
     font-size: 1.2rem;
 }
 
+h4 {
+    font-family: 'Press Start 2P';
+    font-size: 1rem;
+    font-weight: bold;
+
+    margin-bottom: 0;
+}
+
 p {
     font-family: 'Press Start 2P';
 }
 
 .pokemon-card h2,
-.detail-content h3 {
+.dialog-title h3 {
     text-transform: capitalize;
 }

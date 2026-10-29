@@ -79,6 +79,14 @@ function extractIconUrl(typeData) {
   );
 }
 
+function renderTypeNames(typesIcons) {
+  if (!typesIcons) return "";
+
+  return typesIcons
+    .map((type) => type.name.charAt(0).toUpperCase() + type.name.slice(1))
+    .join(", ");
+}
+
 async function fetchPokemonSpecies(speciesUrl) {
   let response = await fetch(speciesUrl);
   return await response.json();

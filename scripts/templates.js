@@ -29,26 +29,29 @@ function createPokemonCardHTML(poke, index) {
 
 function createPokemonDialogHTML(poke) {
   return `
-    <section class="detail-content">
-        <div class="dialog-top">
-            <div class="dialog-title">
-                <p>#${poke.id}</p>
-                <h3>${poke.name}</h3>
-            </div>
-            <button onclick="closeModal()">Close</button>
-        </div>
-        <div class="detail-images">
-            <img src="${poke.sprites.front_default}" alt="${poke.name}">
-            <div class="type-container">
-                ${renderTypeIcons(poke.typeIcons)}
-            </div>
-        </div>
-        <p class="entry-text">${poke.flavorText}</p>
-        <div class="dialog-details">
-            <p>Height: ${convertToMeters(poke.height)}m</p>
-            <p>Weight: ${convertToKg(poke.weight)}kg</p>
-        </div>
-    </section >
+    <section>
+                <div class="dialog-top">
+                    <div class="dialog-title">
+                        <p>#${poke.id}</p>
+                        <h3>${poke.name}</h3>
+                    </div>
+                    <button onclick="closeModal()">Close</button>
+                </div>
+                <div class="detail-content">
+                    <div class="detail-images">
+                        <img src="${poke.sprites.front_default}" alt="${poke.name}">
+                    </div>
+                    <div class="detail-infos">
+                        <h4>Description: </h4>
+                        <p class="entry-text">${poke.flavorText}</p>
+                        <div class="dialog-details">
+                            <P>Type: ${renderTypeNames(poke.typeIcons)}</p>
+                            <p>Height: ${convertToMeters(poke.height)}m</p>
+                            <p>Weight: ${convertToKg(poke.weight)}kg</p>
+                        </div>
+                    </div>
+                </div>
+    </section>
     `;
 }
 

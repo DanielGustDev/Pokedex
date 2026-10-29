@@ -4,7 +4,7 @@
     position: relative;
 
     height: 390px;
-    width: 280px;
+    width: 300px;
 
     border: var(--border);
     border-radius: 6px;
@@ -21,7 +21,7 @@
 }
 
 .pokemon-card.type-fire {
-    background-color: rgb(222, 98, 52);
+    background-color: rgb(245, 57, 24);
 }
 
 .pokemon-card.type-water {
@@ -93,7 +93,9 @@
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
+
+    width: auto;
 
     margin-top: 8px;
     margin-bottom: 8px;
@@ -116,7 +118,7 @@
 .type-container img {
     width: 56px;
 
-    margin-top: 8px;
+    margin: 8px;
 
     border: var(--border);
     border-radius: 50%;
@@ -183,19 +185,44 @@
     gap: 8px;
 }
 
+.detail-content {
+    display: flex;
+}
+
 .detail-images {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
 }
 
 .detail-images>img {
-    width: 340px;
+    width: 300px;
 }
 
 .type-container {
     display: flex;
     justify-content: center;
+}
+
+.detail-infos {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 8px;
+}
+
+.detail-infos h4 {
+    margin-top: 16px;
+}
+
+.detail-infos p {
+    line-height: 150%;
+}
+
+.detail-infos>p {
+    padding: 6px;
+
+    border: var(--border);
 }
 
 /* Other Elements */
