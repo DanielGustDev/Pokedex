@@ -153,8 +153,9 @@
 .pokemon-dialog {
     background-color: var(--background-primary);
 
-    border: 4px solid silver;
-    border-radius: 8px;
+    border: var(--border);
+    border-radius: 24px;
+    corner-shape: bevel;
 
     padding: 24px;
     margin: auto;
@@ -179,11 +180,14 @@
 .dialog-top {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-end;
+    gap: 20%;
 }
 
 .dialog-title {
     display: flex;
+    justify-content: center;
+    align-items: center;
     gap: 8px;
 }
 
@@ -220,7 +224,8 @@
     padding: 6px;
 
     border: var(--border);
-    border-radius: 4px;
+    border-radius: 12px;
+    corner-shape: bevel;
 }
 
 .dialog-navbar {
@@ -232,30 +237,51 @@
 
 .dialog-details {
     width: 100%;
-    height: 220px;
-    min-height: 220px;
+    height: 250px;
+    min-height: 250px;
     max-height: 150px;
 
     font-family: 'Press Start 2P';
 
     border: var(--border);
-    border-collapse: collapse;
+    border-radius: 12px;
+    corner-shape: bevel;
 
     overflow-y: auto;
+}
+
+table {
+    border-collapse: separate;
+    border-spacing: 0;
+    overflow: hidden;
 }
 
 .dialog-details th,
 td {
     text-align: start;
 
-    border: var(--border);
+    border-right: var(--border);
+    border-bottom: var(--border);
 
-    padding: 4px 8px;
+    padding: 6px 8px;
+}
+
+th:last-child,
+td:last-child {
+    border-right: none;
+}
+
+tr:last-child td,
+tr:last-child th {
+    border-bottom: none;
 }
 
 .dialog-callbox {
     display: flex;
+    flex-direction: column;
+    justify-content: center;
     align-items: center;
+    gap: 36px;
 
     padding: 4px 8px;
 }

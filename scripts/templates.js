@@ -43,8 +43,14 @@ function createPokemonDialogHTML(poke, index) {
     <section>
                 <div class="dialog-top">
                     <div class="dialog-title">
+                    <button class="left_button" id="prevButton" onclick="navigatePokemon(${index}, -1)"
+                        aria-label="previous pokemon"><
+                    </button>
                         <p>#${poke.id}</p>
                         <h3>${poke.name}</h3>
+                        <button class="right_button" id="nextButton" onclick="navigatePokemon(${index}, 1)" aria-label="next pokemon">
+                        >
+                    </button>
                     </div>
                     <button onclick="closeModal()">Close</button>
                 </div>

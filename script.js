@@ -135,3 +135,15 @@ function showCall(index) {
   document.getElementById("dialog_detail_container").innerHTML =
     getCallHTML(poke);
 }
+
+function navigatePokemon(currentIndex, direction) {
+  let newIndex = currentIndex + direction;
+
+  if (newIndex < 0) {
+    newIndex = loadedPokemon.lenght - 1;
+  } else if (newIndex >= loadedPokemon.lenght) {
+    newIndex = 0;
+  }
+
+  openPokemonModal(newIndex);
+}
