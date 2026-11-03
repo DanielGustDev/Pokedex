@@ -56,7 +56,7 @@ function createPokemonDialogHTML(poke, index) {
                 </div>
                 <div class="detail-content">
                     <div class="detail-images">
-                        <img src="${poke.sprites.front_default}" alt="${poke.name}">
+                        <img src="${poke.sprites.other.home.front_default}" alt="${poke.name}">
                     </div>
                     <div class="detail-infos">
                         <h4>Description: </h4>

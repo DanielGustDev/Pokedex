@@ -95,7 +95,7 @@ async function fetchPokemonSpecies(speciesUrl) {
 function extractFlavorText(speciesData) {
   let rawText =
     speciesData.flavor_text_entries?.[0]?.flavor_text ||
-    "No Pokedédex entry found.";
+    "No Pokédex entry found.";
   return rawText.replace(/[\n\f]/g, " ");
 }
 
@@ -136,8 +136,12 @@ function showCall(index) {
     getCallHTML(poke);
 }
 
-function navigatePokemon(currentIndex, direction) {
+async function navigatePokemon(currentIndex, direction) {
   let newIndex = currentIndex + direction;
+
+  if (direction > 0 && newIndex >= loadedPokemon.length) {
+    await loadData();
+  }
 
   if (newIndex < 0) {
     newIndex = loadedPokemon.lenght - 1;
