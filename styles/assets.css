@@ -308,3 +308,29 @@ button {
 
     cursor: pointer;
 }
+
+.spinner-wrapper {
+    text-align: center;
+    padding: 36px;
+}
+
+.loading-spinner {
+    display: block;
+
+    width: 64px;
+    height: 64px;
+
+    margin: 20px auto;
+
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}

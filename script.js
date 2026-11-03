@@ -99,8 +99,19 @@ function extractFlavorText(speciesData) {
   return rawText.replace(/[\n\f]/g, " ");
 }
 
-function loadMorePokemon() {
-  loadData();
+async function loadMorePokemon() {
+  let loadButton = document.getElementById("load_more_button");
+  if (loadButton) {
+    loadButton.disabled = true;
+    loadButton.innerHTML = "Loading... ${getLoadingSpinnerHTML()}";
+  }
+
+  await loadData();
+
+  if (loadButton) {
+    loadButton.disabled = false;
+    loadButton.innerText = "Load More";
+  }
 }
 
 function openPokemonModal(index) {
@@ -140,12 +151,13 @@ async function navigatePokemon(currentIndex, direction) {
   let newIndex = currentIndex + direction;
 
   if (direction > 0 && newIndex >= loadedPokemon.length) {
+    showLoadingSpinner();
     await loadData();
   }
 
   if (newIndex < 0) {
-    newIndex = loadedPokemon.lenght - 1;
-  } else if (newIndex >= loadedPokemon.lenght) {
+    newIndex = loadedPokemon.length - 1;
+  } else if (newIndex >= loadedPokemon.length) {
     newIndex = 0;
   }
 
