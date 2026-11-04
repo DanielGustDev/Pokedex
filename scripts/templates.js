@@ -123,22 +123,3 @@ function getCallHTML(poke) {
         </div>
     `;
 }
-
-function getLoadingSpinnerHTML() {
-  return `
-    <svg class="loading-spinner xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-  <circle cx="50" cy="50" r="45" fill="#FFFFFF" stroke="#1A1A1A" stroke-width="6" />
-  <line x1="5" y1="50" x2="95" y2="50" stroke="#1A1A1A" stroke-width="6" />
-  <circle cx="50" cy="50" r="16" fill="#FFFFFF" stroke="#1A1A1A" stroke-width="6" />
-  <circle cx="50" cy="50" r="7" fill="#1A1A1A" />
-</svg>`;
-}
-
-function showLoadingSpinner() {
-  let modalBody = document.getElementById("modal_body");
-  modalBody.innerHTML = `
-    <section class="spinner-wrapper">
-        <h3>Loading Pokèmon...</h3>
-        ${getLoadingSpinnerHTML()}
-    </section>`;
-}

@@ -6,14 +6,19 @@ let currentLimit = 20;
 let loadedPokemon = [];
 
 async function loadData() {
-  let url = `${BASE_URL}?limit=${currentLimit}&offset=${currentOffset}`;
-  let response = await fetch(url);
-  let data = await response.json();
+  showLoadingSpinner();
+  try {
+    let url = `${BASE_URL}?limit=${currentLimit}&offset=${currentOffset}`;
+    let response = await fetch(url);
+    let data = await response.json();
 
-  await renderPokemonList(data.results);
+    await renderPokemonList(data.results);
 
-  currentOffset += currentLimit;
-  currentLimit = 10;
+    currentOffset += currentLimit;
+    currentLimit = 10;
+  } finally {
+    hideLoadingSpinner();
+  }
 }
 
 async function renderPokemonList(pokemonList) {
@@ -103,7 +108,8 @@ async function loadMorePokemon() {
   let loadButton = document.getElementById("load_more_button");
   if (loadButton) {
     loadButton.disabled = true;
-    loadButton.innerHTML = "Loading... ${getLoadingSpinnerHTML()}";
+    loadButton.innerHTML = "Loading...";
+    showLoadingSpinner();
   }
 
   await loadData();
@@ -151,7 +157,6 @@ async function navigatePokemon(currentIndex, direction) {
   let newIndex = currentIndex + direction;
 
   if (direction > 0 && newIndex >= loadedPokemon.length) {
-    showLoadingSpinner();
     await loadData();
   }
 
@@ -162,4 +167,22 @@ async function navigatePokemon(currentIndex, direction) {
   }
 
   openPokemonModal(newIndex);
+}
+
+function showLoadingSpinner() {
+  let overlay = document.getElementById("loading_popover");
+  if (overlay) {
+    try {
+      overlay.showPopover();
+    } catch (error) {}
+  }
+}
+
+function hideLoadingSpinner() {
+  let overlay = document.getElementById("loading_popover");
+  if (overlay) {
+    try {
+      overlay.hidePopover();
+    } catch (error) {}
+  }
 }

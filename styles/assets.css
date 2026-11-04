@@ -309,9 +309,42 @@ button {
     cursor: pointer;
 }
 
-.spinner-wrapper {
+.loading-spinner-wrapper {
+    position: fixed;
+    inset: 0;
+
+    padding: 0;
+    margin: auto;
+
+    background: transparent;
+
+    border: none;
+
+    overflow: visible;
+}
+
+.loading-spinner-wrapper:popover-open {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.loading-spinner-wrapper::backdrop {
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(8px);
+}
+
+.loading-popover-content {
+    background: rgba(0, 0, 0, 0.3);
+
+    padding: 30px 40px;
+
+    border-radius: 16px;
+
     text-align: center;
-    padding: 36px;
+    color: var(--font-primary);
+
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
 }
 
 .loading-spinner {
@@ -320,7 +353,7 @@ button {
     width: 64px;
     height: 64px;
 
-    margin: 20px auto;
+    margin: 20px auto 0 auto;
 
     animation: spin 1s linear infinite;
 }
