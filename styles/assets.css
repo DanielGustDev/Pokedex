@@ -304,6 +304,25 @@ tr:last-child th {
     padding: 4px 8px;
 }
 
+.evolution-wrapper {
+    display: flex;
+
+    margin-top: 24px;
+}
+
+.evo-button {
+    border: none;
+    background-color: transparent;
+
+    color: var(--font-primary);
+    font-size: 12px;
+    text-transform: capitalize;
+}
+
+.evo-button img {
+    width: 60px;
+}
+
 /* Other Elements */
 
 button {

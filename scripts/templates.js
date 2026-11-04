@@ -57,6 +57,8 @@ function createPokemonDialogHTML(poke, index) {
                 <div class="detail-content">
                     <div class="detail-images">
                         <img src="${poke.sprites.other.home.front_default}" alt="${poke.name}">
+
+                        ${renderEvolutionChain(poke.evolutionChain)}
                     </div>
                     <div class="detail-infos">
                         <h4>Description: </h4>
@@ -122,4 +124,23 @@ function getCallHTML(poke) {
             ${cryUrl ? `<audio controls src="${cryUrl}"></audio>` : "<p>No Call known</p>"}
         </div>
     `;
+}
+
+function renderEvolutionChain(evolutionChain) {
+  if (!evolutionChain || evolutionChain.length <= 1) return "";
+  let buttonHtml = evolutionChain
+    .map((evolution) => {
+      let pokemonIndex = findPokemonIndexByName(evolution.name);
+      return `
+        <button class="evo-button" onclick="openPokemonModal(${pokemonIndex})">
+            <img src="${evolution.image}" alt="${evolution.name}">
+            <p>${evolution.name}</p>
+        </button>
+    `;
+    })
+    .join("");
+  return `<section class="evolution-wrapper">
+            <h4>Evolutions</h4>
+            ${buttonHtml}
+        </section>`;
 }

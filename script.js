@@ -43,6 +43,11 @@ async function fetchPokemonDetails(url) {
   let speciesData = await fetchPokemonSpecies(pokemon.species.url);
   pokemon.flavorText = extractFlavorText(speciesData);
 
+  let evolutionResponse = await fetch(speciesData.evolution_chain.url);
+  pokemon.evolutionChain = await fetchEvolutionChain(
+    speciesData.evolution_chain.url,
+  );
+
   return pokemon;
 }
 
@@ -185,4 +190,26 @@ function hideLoadingSpinner() {
       overlay.hidePopover();
     } catch (error) {}
   }
+}
+
+async function fetchEvolutionChain(evolutionChainUrl) {
+  let chainData = await (await fetch(evolutionChainUrl)).json();
+  let evolutionList = [];
+  let evonlutionStep = chainData.chain;
+
+  while (evonlutionStep) {
+    let pokemonUrl = `${BASE_URL}${evonlutionStep.species.name}`;
+    let pokemonDetails = await (await fetch(pokemonUrl)).json();
+    let buttonImage = pokemonDetails.sprites.front_default;
+    evolutionList.push({
+      name: evonlutionStep.species.name,
+      image: buttonImage,
+    });
+    evonlutionStep = evonlutionStep.evolves_to[0];
+  }
+  return evolutionList;
+}
+
+function findPokemonIndexByName(pokemonName) {
+  return loadedPokemon.findIndex((poke) => poke.name === pokemonName);
 }
