@@ -129,18 +129,19 @@ function getCallHTML(poke) {
 function renderEvolutionChain(evolutionChain) {
   if (!evolutionChain || evolutionChain.length <= 1) return "";
   let buttonHtml = evolutionChain
-    .map((evolution) => {
-      let pokemonIndex = findPokemonIndexByName(evolution.name);
-      return `
-        <button class="evo-button" onclick="openPokemonModal(${pokemonIndex})">
+    .map(
+      (evolution) => `
+        <button class="evo-button" onclick="openPokemonEvolution('${evolution.name}')">
             <img src="${evolution.image}" alt="${evolution.name}">
             <p>${evolution.name}</p>
         </button>
-    `;
-    })
+    `,
+    )
     .join("");
   return `<section class="evolution-wrapper">
             <h4>Evolutions</h4>
+            <div class="evo-chain">
             ${buttonHtml}
+            </div>
         </section>`;
 }

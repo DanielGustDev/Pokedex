@@ -159,19 +159,25 @@ function showCall(index) {
 }
 
 async function navigatePokemon(currentIndex, direction) {
-  let newIndex = currentIndex + direction;
+  let currentPoke = loadedPokemon[currentIndex];
+  let targetId = currentPoke.id + direction;
 
-  if (direction > 0 && newIndex >= loadedPokemon.length) {
-    await loadData();
+  if (targetId < 1) targetId = 1;
+
+  let targetIndex = findPokemonIndexById(targetId);
+
+  if (targetIndex === -1) {
+    showLoadingSpinner();
+    try {
+      let pokemonDetails = await fetchPokemonDetails(`${BASE_URL}${targetId}`);
+      loadedPokemon.push(pokemonDetails);
+      loadedPokemon.sort((a, b) => a.id - b.id);
+      targetIndex = findPokemonIndexById(targetId);
+    } finally {
+      hideLoadingSpinner();
+    }
   }
-
-  if (newIndex < 0) {
-    newIndex = loadedPokemon.length - 1;
-  } else if (newIndex >= loadedPokemon.length) {
-    newIndex = 0;
-  }
-
-  openPokemonModal(newIndex);
+  openPokemonModal(targetIndex);
 }
 
 function showLoadingSpinner() {
@@ -193,23 +199,51 @@ function hideLoadingSpinner() {
 }
 
 async function fetchEvolutionChain(evolutionChainUrl) {
-  let chainData = await (await fetch(evolutionChainUrl)).json();
+  let response = await fetch(evolutionChainUrl);
+  let chainData = await response.json();
   let evolutionList = [];
-  let evonlutionStep = chainData.chain;
 
-  while (evonlutionStep) {
-    let pokemonUrl = `${BASE_URL}${evonlutionStep.species.name}`;
-    let pokemonDetails = await (await fetch(pokemonUrl)).json();
-    let buttonImage = pokemonDetails.sprites.front_default;
-    evolutionList.push({
-      name: evonlutionStep.species.name,
-      image: buttonImage,
-    });
-    evonlutionStep = evonlutionStep.evolves_to[0];
-  }
+  await parseEvolutionStep(chainData.chain, evolutionList);
   return evolutionList;
+}
+
+async function parseEvolutionStep(step, evolutionList) {
+  if (!step) return;
+  await addEvolutionPokemon(step, evolutionList);
+
+  let nextSteps = step.evolves_to || [];
+  for (let nextStep of nextSteps) {
+    await parseEvolutionStep(nextStep, evolutionList);
+  }
+}
+
+async function addEvolutionPokemon(step, evolutionList) {
+  let url = `${BASE_URL}${step.species.name}`;
+  let response = await fetch(url);
+  let details = await response.json();
+
+  evolutionList.push({
+    name: step.species.name,
+    image: details.sprites.front_default,
+  });
 }
 
 function findPokemonIndexByName(pokemonName) {
   return loadedPokemon.findIndex((poke) => poke.name === pokemonName);
+}
+
+async function openPokemonEvolution(pokemonName) {
+  let pokemonIndex = findPokemonIndexByName(pokemonName);
+  if (pokemonIndex === -1) {
+    showLoadingSpinner();
+    let pokemonDetails = await fetchPokemonDetails(`${BASE_URL}${pokemonName}`);
+    loadedPokemon.push(pokemonDetails);
+    pokemonIndex = loadedPokemon.length - 1;
+    hideLoadingSpinner();
+  }
+  openPokemonModal(pokemonIndex);
+}
+
+function findPokemonIndexById(pokemonId) {
+  return loadedPokemon.findIndex((poke) => poke.id === pokemonId);
 }
