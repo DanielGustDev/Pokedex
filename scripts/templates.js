@@ -1,5 +1,7 @@
 // @ts-nocheck
 
+//  POKEMON CARD TEMPLATES & DATA HELPERS
+
 function getPokemonData(poke) {
   return {
     id: poke.id,
@@ -37,6 +39,8 @@ function renderTypeIcons(typeIcons) {
     )
     .join("");
 }
+
+//  MODAL / DIALOG MAIN TEMPLATE
 
 function createPokemonDialogHTML(poke, index) {
   return `
@@ -76,6 +80,8 @@ function createPokemonDialogHTML(poke, index) {
             </section>
     `;
 }
+
+//  MODAL SUB-TABS
 
 function getDetailsHTML(poke) {
   return `
@@ -125,6 +131,8 @@ function getCallHTML(poke) {
         </div>
     `;
 }
+
+//  MODAL COMPONENTS
 
 function renderEvolutionChain(evolutionChain) {
   if (!evolutionChain || evolutionChain.length <= 1) return "";

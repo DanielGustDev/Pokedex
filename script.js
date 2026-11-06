@@ -1,9 +1,13 @@
 // @ts-nocheck
 
+// GLOBAL VARIABLES & CONSTANTS
+
 const BASE_URL = "https://pokeapi.co/api/v2/pokemon/";
 let currentOffset = 0;
 let currentLimit = 20;
 let loadedPokemon = [];
+
+//  INITIAL LOADING & LIST RENDERING
 
 async function loadData() {
   showLoadingSpinner();
@@ -34,6 +38,24 @@ async function renderPokemonList(pokemonList) {
   }
 }
 
+async function loadMorePokemon() {
+  let loadButton = document.getElementById("load_more_button");
+  if (loadButton) {
+    loadButton.disabled = true;
+    loadButton.innerHTML = "Loading...";
+    showLoadingSpinner();
+  }
+
+  await loadData();
+
+  if (loadButton) {
+    loadButton.disabled = false;
+    loadButton.innerText = "Load More";
+  }
+}
+
+//  API FETCHING & LAZY LOADING (DETAILS)
+
 async function fetchPokemon(url) {
   let response = await fetch(url);
   let pokemon = await response.json();
@@ -53,18 +75,44 @@ async function ensurePokemonDetails(poke) {
   );
 }
 
-function formatDecimal(value) {
-  return value.toString().replace(".", ",");
-}
-function convertToMeters(height) {
-  let meters = (height / 10).toFixed(1);
-  return formatDecimal(meters);
+async function fetchPokemonSpecies(speciesUrl) {
+  let response = await fetch(speciesUrl);
+  return await response.json();
 }
 
-function convertToKg(weight) {
-  let kg = (weight / 10).toFixed(1);
-  return formatDecimal(kg);
+//  EVOLUTION CHAIN PARSING
+
+async function fetchEvolutionChain(evolutionChainUrl) {
+  let response = await fetch(evolutionChainUrl);
+  let chainData = await response.json();
+  let evolutionList = [];
+
+  await parseEvolutionStep(chainData.chain, evolutionList);
+  return evolutionList;
 }
+
+async function parseEvolutionStep(step, evolutionList) {
+  if (!step) return;
+  await addEvolutionPokemon(step, evolutionList);
+
+  let nextSteps = step.evolves_to || [];
+  for (let nextStep of nextSteps) {
+    await parseEvolutionStep(nextStep, evolutionList);
+  }
+}
+
+async function addEvolutionPokemon(step, evolutionList) {
+  let url = `${BASE_URL}${step.species.name}`;
+  let response = await fetch(url);
+  let details = await response.json();
+
+  evolutionList.push({
+    name: step.species.name,
+    image: details.sprites.front_default,
+  });
+}
+
+//  TYPE ICONS & FORMATTING HELPERS
 
 async function loadIcons(typesArray) {
   let typePromises = typesArray.map((typeInfo) =>
@@ -99,11 +147,6 @@ function renderTypeNames(typesIcons) {
     .join(", ");
 }
 
-async function fetchPokemonSpecies(speciesUrl) {
-  let response = await fetch(speciesUrl);
-  return await response.json();
-}
-
 function extractFlavorText(speciesData) {
   let englishEntry = speciesData.flavor_text_entries?.find(
     (entry) => entry.language.name === "en",
@@ -115,21 +158,21 @@ function extractFlavorText(speciesData) {
   return rawText.replace(/[\n\f]/g, " ");
 }
 
-async function loadMorePokemon() {
-  let loadButton = document.getElementById("load_more_button");
-  if (loadButton) {
-    loadButton.disabled = true;
-    loadButton.innerHTML = "Loading...";
-    showLoadingSpinner();
-  }
-
-  await loadData();
-
-  if (loadButton) {
-    loadButton.disabled = false;
-    loadButton.innerText = "Load More";
-  }
+function formatDecimal(value) {
+  return value.toString().replace(".", ",");
 }
+
+function convertToMeters(height) {
+  let meters = (height / 10).toFixed(1);
+  return formatDecimal(meters);
+}
+
+function convertToKg(weight) {
+  let kg = (weight / 10).toFixed(1);
+  return formatDecimal(kg);
+}
+
+//  MODAL & UI INTERACTION
 
 async function openPokemonModal(index) {
   let dialog = document.getElementById("pokemon_dialog");
@@ -167,6 +210,8 @@ function showCall(index) {
     getCallHTML(poke);
 }
 
+//  NAVIGATION, CACHING & SEARCH HELPERS
+
 async function navigatePokemon(currentIndex, direction) {
   let targetId = getTargetPokemonId(currentIndex, direction);
   let targetIndex = findPokemonIndexById(targetId);
@@ -195,6 +240,29 @@ async function loadAndCachePokemon(targetId) {
   }
 }
 
+async function openPokemonEvolution(pokemonName) {
+  let pokemonIndex = findPokemonIndexByName(pokemonName);
+  if (pokemonIndex === -1) {
+    showLoadingSpinner();
+    let pokemonDetails = await fetchPokemon(`${BASE_URL}${pokemonName}`);
+    loadedPokemon.push(pokemonDetails);
+    loadedPokemon.sort((pokemonA, pokemonB) => pokemonA.id - pokemonB.id);
+    pokemonIndex = findPokemonIndexById(pokemonDetails.id);
+    hideLoadingSpinner();
+  }
+  await openPokemonModal(pokemonIndex);
+}
+
+function findPokemonIndexById(pokemonId) {
+  return loadedPokemon.findIndex((poke) => poke.id === pokemonId);
+}
+
+function findPokemonIndexByName(pokemonName) {
+  return loadedPokemon.findIndex((poke) => poke.name === pokemonName);
+}
+
+//  LOADING SPINNER CONTROLS
+
 function showLoadingSpinner() {
   let overlay = document.getElementById("loading_popover");
   if (overlay) {
@@ -211,55 +279,4 @@ function hideLoadingSpinner() {
       overlay.hidePopover();
     } catch (error) {}
   }
-}
-
-async function fetchEvolutionChain(evolutionChainUrl) {
-  let response = await fetch(evolutionChainUrl);
-  let chainData = await response.json();
-  let evolutionList = [];
-
-  await parseEvolutionStep(chainData.chain, evolutionList);
-  return evolutionList;
-}
-
-async function parseEvolutionStep(step, evolutionList) {
-  if (!step) return;
-  await addEvolutionPokemon(step, evolutionList);
-
-  let nextSteps = step.evolves_to || [];
-  for (let nextStep of nextSteps) {
-    await parseEvolutionStep(nextStep, evolutionList);
-  }
-}
-
-async function addEvolutionPokemon(step, evolutionList) {
-  let url = `${BASE_URL}${step.species.name}`;
-  let response = await fetch(url);
-  let details = await response.json();
-
-  evolutionList.push({
-    name: step.species.name,
-    image: details.sprites.front_default,
-  });
-}
-
-function findPokemonIndexByName(pokemonName) {
-  return loadedPokemon.findIndex((poke) => poke.name === pokemonName);
-}
-
-async function openPokemonEvolution(pokemonName) {
-  let pokemonIndex = findPokemonIndexByName(pokemonName);
-  if (pokemonIndex === -1) {
-    showLoadingSpinner();
-    let pokemonDetails = await fetchPokemon(`${BASE_URL}${pokemonName}`);
-    loadedPokemon.push(pokemonDetails);
-    loadedPokemon.sort((pokemonA, pokemonB) => pokemonA.id - pokemonB.id);
-    pokemonIndex = findPokemonIndexById(pokemonDetails.id);
-    hideLoadingSpinner();
-  }
-  await openPokemonModal(pokemonIndex);
-}
-
-function findPokemonIndexById(pokemonId) {
-  return loadedPokemon.findIndex((poke) => poke.id === pokemonId);
 }

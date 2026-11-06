@@ -1,4 +1,4 @@
-/* Card */
+/* POKEMON CARD*/
 
 .pokemon-card {
     position: relative;
@@ -148,7 +148,8 @@
     translate: 100% 0;
 }
 
-/* Modal */
+
+/*  MODAL / DIALOG */
 
 .pokemon-dialog {
     background-color: var(--background-primary);
@@ -269,11 +270,7 @@
     overflow-y: auto;
 }
 
-table {
-    border-collapse: separate;
-    border-spacing: 0;
-    overflow: hidden;
-}
+
 
 .dialog-details th,
 td {
@@ -304,6 +301,9 @@ tr:last-child th {
 
     padding: 4px 8px;
 }
+
+
+/* EVOLUTION CHAIN */
 
 .evolution-wrapper {
     display: flex;
@@ -344,28 +344,8 @@ tr:last-child th {
     width: 80px;
 }
 
-/* Other Elements */
 
-button {
-    height: 24px;
-
-    padding: 6px 12px;
-
-    background-color: white;
-
-    filter:
-        drop-shadow(0 -2px 2px rgba(0, 0, 0, 0.7)) drop-shadow(0 2px 2px rgba(255, 255, 255, 0.4));
-
-    border-radius: 24px;
-
-    color: black;
-    font-family: 'Press Start 2P';
-    font-weight: bold;
-
-    text-align: center;
-
-    cursor: pointer;
-}
+/* LOADING SPINNER */
 
 .loading-spinner-wrapper {
     position: fixed;
