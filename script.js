@@ -6,6 +6,7 @@ const BASE_URL = "https://pokeapi.co/api/v2/pokemon/";
 let currentOffset = 0;
 let currentLimit = 20;
 let loadedPokemon = [];
+let cachedAllPokemon = null;
 
 //  INITIAL LOADING & LIST RENDERING
 
@@ -280,3 +281,78 @@ function hideLoadingSpinner() {
     } catch (error) {}
   }
 }
+
+//  SEARCH FUNCTIONALITY
+
+async function handleSearch() {
+  let query = getSearchQuery();
+  if (query.length < 3) return;
+
+  showLoadingSpinner();
+  try {
+    let allPokemon = await fetchAllPokemonNames();
+    let matches = allPokemon.filter((poke) => poke.name.includes(query));
+    await renderSearchResults(matches);
+  } finally {
+    hideLoadingSpinner();
+  }
+}
+
+function getSearchQuery() {
+  let inputField = document.querySelector(".pokedex-search");
+  return inputField ? inputField.value.trim().toLowerCase() : "";
+}
+
+async function fetchAllPokemonNames() {
+  if (cachedAllPokemon) return cachedAllPokemon;
+
+  let initialResponse = await fetch(`${BASE_URL}?limit=1`);
+  let initialData = await initialResponse.json();
+  let totalCount = initialData.count;
+
+  let response = await fetch(`${BASE_URL}?limit=${totalCount}`);
+  let data = await response.json();
+
+  cachedAllPokemon = data.results;
+  return cachedAllPokemon;
+}
+
+async function renderSearchResults(matches) {
+  let cardGrid = document.querySelector(".card-grid");
+  cardGrid.innerHTML = "";
+  loadedPokemon = [];
+
+  if (matches.length === 0) {
+    cardGrid.innerHTML = `<p class="no-results">No Pokèmon found.</p>`;
+    return;
+  }
+
+  for (let match of matches) {
+    await processAndRenderPokemon(match, cardGrid);
+  }
+}
+
+async function processAndRenderPokemon(match, cardGrid) {
+  let pokemonData = await fetchPokemon(match.url);
+  loadedPokemon.push(pokemonData);
+  loadedPokemon.sort((pokemonA, pokemonB) => pokemonA.id - pokemonB.id);
+  let index = findPokemonIndexById(pokemonData.id);
+  cardGrid.innerHTML += createPokemonCardHTML(pokemonData, index);
+}
+
+//  EVENT LISTENER
+
+document.addEventListener("DOMContentLoaded", () => {
+  let searchButton = document.querySelector(".search-button");
+  let searchInput = document.querySelector(".pokedex-search");
+
+  if (searchButton) {
+    searchButton.addEventListener("click", handleSearch);
+  }
+
+  if (searchInput) {
+    searchInput.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") handleSearch();
+    });
+  }
+});
