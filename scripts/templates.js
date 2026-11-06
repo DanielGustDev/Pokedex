@@ -71,6 +71,7 @@ function createPokemonDialogHTML(poke, index) {
                             <button onclick="showDetails(${index})">Details</button>
                             <button onclick="showStats(${index})">Stats</button>
                             <button onclick="showCall(${index})">Call</button>
+                            <button onclick="showForms(${index})">Forms</button>
                         </nav>
                         <div id="dialog_detail_container">
                             ${getDetailsHTML(poke)}
@@ -130,6 +131,25 @@ function getCallHTML(poke) {
             ${cryUrl ? `<audio controls src="${cryUrl}"></audio>` : "<p>No Call known</p>"}
         </div>
     `;
+}
+
+function getFormsHTML(poke) {
+  if (!poke.formsList || poke.formsList.length <= 1) {
+    return `<div class="dialog-callbox dialog-details"><p>No alternative forms known.</p></div>`;
+  }
+  let buttonHtml = poke.formsList
+    .map(
+      (form) => `
+    <button class="evo-button" onclick="openPokemonEvolution('${form.name}')">
+        <img src="${form.image}" alt="${form.name}">
+        <p>${form.name}</p>
+    </button>`,
+    )
+    .join("");
+
+  return `<div class="dialog-details evolution-wrapper" style="width: 100%; margin: 0; border: none; height: auto;">
+            <div class="evo-chain">${buttonHtml}</div>
+          </div>`;
 }
 
 //  MODAL COMPONENTS

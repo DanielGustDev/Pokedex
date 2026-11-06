@@ -74,11 +74,28 @@ async function ensurePokemonDetails(poke) {
   poke.evolutionChain = await fetchEvolutionChain(
     speciesData.evolution_chain.url,
   );
+  poke.formsList = await fetchPokemonForms(speciesData.varieties);
 }
 
 async function fetchPokemonSpecies(speciesUrl) {
   let response = await fetch(speciesUrl);
   return await response.json();
+}
+
+async function fetchPokemonForms(varieties) {
+  if (!varieties || varieties.length <= 1) return [];
+  let formPromises = varieties.map(async (variety) => {
+    let response = await fetch(variety.pokemon.url);
+    let details = await response.json();
+    return { name: variety.pokemon.name, image: details.sprites.front_default };
+  });
+  return await Promise.all(formPromises);
+}
+
+function showForms(index) {
+  let poke = loadedPokemon[index];
+  document.getElementById("dialog_detail_container").innerHTML =
+    getFormsHTML(poke);
 }
 
 //  EVOLUTION CHAIN PARSING
