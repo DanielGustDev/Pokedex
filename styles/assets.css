@@ -3,7 +3,7 @@
 .pokemon-card {
     position: relative;
 
-    height: 390px;
+    height: 400px;
     width: 300px;
 
     border: var(--border);
@@ -110,6 +110,8 @@
 
 .pokemon-card img {
     width: 240px;
+    height: 240px;
+    aspect-ratio: 1;
 
     background-color: var(--background-tertiary);
 
@@ -119,6 +121,7 @@
 
 .type-container img {
     width: 56px;
+    height: 56px;
 
     margin: 8px;
 

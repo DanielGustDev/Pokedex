@@ -142,6 +142,21 @@ header {
     flex-shrink: 0;
 }
 
+.home-button {
+    align-self: center;
+
+    height: auto;
+
+    padding: 0;
+
+    background-color: transparent;
+
+    border: none;
+    border-radius: 50%;
+
+    filter: none;
+}
+
 .headline svg {
     width: clamp(48px, 5vw, 64px);
     height: clamp(48px, 5vw, 64px);

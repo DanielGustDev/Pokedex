@@ -32,19 +32,21 @@
                         <span class="light green"></span>
                     </div>
                     <div class="headline">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-                            <!-- Outer Circle -->
-                            <circle cx="50" cy="50" r="45" fill="none" stroke="#FFFFFF" stroke-width="6" />
+                        <button class="home-button" onclick="resetToMainView()">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+                                <!-- Outer Circle -->
+                                <circle cx="50" cy="50" r="45" fill="none" stroke="#FFFFFF" stroke-width="6" />
 
-                            <!-- lower darker half -->
-                            <line x1="5" y1="50" x2="95" y2="50" stroke="#FFFFFF" stroke-width="6" />
+                                <!-- lower darker half -->
+                                <line x1="5" y1="50" x2="95" y2="50" stroke="#FFFFFF" stroke-width="6" />
 
-                            <!-- Center Circle -->
-                            <circle cx="50" cy="50" r="16" fill="none" stroke="#FFFFFF" stroke-width="6" />
+                                <!-- Center Circle -->
+                                <circle cx="50" cy="50" r="16" fill="none" stroke="#FFFFFF" stroke-width="6" />
 
-                            <!-- Center Dott -->
-                            <circle cx="50" cy="50" r="7" fill="#FFFFFF" />
-                        </svg>
+                                <!-- Center Dott -->
+                                <circle cx="50" cy="50" r="7" fill="#FFFFFF" />
+                            </svg>
+                        </button>
                         <h1>Pokédex</h1>
                     </div>
                 </div>
@@ -68,7 +70,8 @@
             <div id="modal_body" onclick="event.stopPropagation()"></div>
         </dialog>
         <footer>
-            <button onclick="loadMorePokemon()" class="load-more-button" id="load_more_button">Load More</button>
+            <button onclick="handleFooterButtonClick()" class="load-more-button" id="load_more_button">Load
+                More</button>
         </footer>
     </div>
     <div id="loading_popover" class="loading-spinner-wrapper" popover="manual">

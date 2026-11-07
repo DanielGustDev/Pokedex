@@ -7,6 +7,7 @@ let currentOffset = 0;
 let currentLimit = 20;
 let loadedPokemon = [];
 let cachedAllPokemon = null;
+let isSearchActive = false;
 
 //  INITIAL LOADING & LIST RENDERING
 
@@ -299,6 +300,27 @@ function hideLoadingSpinner() {
   }
 }
 
+async function handleFooterButtonClick() {
+  if (isSearchActive) {
+    await resetToMainView();
+  } else {
+    await loadMorePokemon();
+  }
+}
+
+async function resetToMainView() {
+  isSearchActive = false;
+  document.querySelector(".pokedex-search").value = "";
+  document.getElementById("load_more_button").innerText = "Load More";
+
+  let cardGrid = document.querySelector(".card-grid");
+  cardGrid.innerHTML = "";
+  loadedPokemon = [];
+  currentOffset = 0;
+  currentLimit = 20;
+  await loadData();
+}
+
 //  SEARCH FUNCTIONALITY
 
 async function handleSearch() {
@@ -335,6 +357,8 @@ async function fetchAllPokemonNames() {
 }
 
 async function renderSearchResults(matches) {
+  isSearchActive = true;
+  document.getElementById("load_more_button").innerText = "Back";
   let cardGrid = document.querySelector(".card-grid");
   cardGrid.innerHTML = "";
   loadedPokemon = [];
@@ -343,7 +367,6 @@ async function renderSearchResults(matches) {
     cardGrid.innerHTML = `<p class="no-results">No Pokèmon found.</p>`;
     return;
   }
-
   for (let match of matches) {
     await processAndRenderPokemon(match, cardGrid);
   }
