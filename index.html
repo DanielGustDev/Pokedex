@@ -70,8 +70,15 @@
             <div id="modal_body" onclick="event.stopPropagation()"></div>
         </dialog>
         <footer>
-            <button onclick="handleFooterButtonClick()" class="load-more-button" id="load_more_button">Load
-                More</button>
+            <div class="footer-controls">
+                <select id="limit_selector" onchange="changeLimit(this.value)">
+                    <option value="30" selected>30</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                </select>
+                <button onclick="handleFooterButtonClick()" class="load-more-button" id="load_more_button">Load
+                    More</button>
+            </div>
         </footer>
     </div>
     <div id="loading_popover" class="loading-spinner-wrapper" popover="manual">
