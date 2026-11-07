@@ -68,10 +68,10 @@ function createPokemonDialogHTML(poke, index) {
                         <h4>Description: </h4>
                         <p class="entry-text">${poke.flavorText}</p>
                         <nav class="dialog-navbar">
-                            <button onclick="showDetails(${index})">Details</button>
-                            <button onclick="showStats(${index})">Stats</button>
-                            <button onclick="showCall(${index})">Call</button>
-                            <button onclick="showForms(${index})">Forms</button>
+                            <button class="active" onclick="showDetails(${index}, event.target)">Details</button>
+                            <button onclick="showStats(${index}, event.target)">Stats</button>
+                            <button onclick="showCall(${index}, event.target)">Call</button>
+                            <button onclick="showForms(${index}, event.target)">Forms</button>
                         </nav>
                         <div id="dialog_detail_container">
                             ${getDetailsHTML(poke)}

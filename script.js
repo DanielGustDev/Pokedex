@@ -93,12 +93,6 @@ async function fetchPokemonForms(varieties) {
   return await Promise.all(formPromises);
 }
 
-function showForms(index) {
-  let poke = loadedPokemon[index];
-  document.getElementById("dialog_detail_container").innerHTML =
-    getFormsHTML(poke);
-}
-
 //  EVOLUTION CHAIN PARSING
 
 async function fetchEvolutionChain(evolutionChainUrl) {
@@ -211,22 +205,39 @@ function closeModal() {
   dialog.close();
 }
 
-function showDetails(index) {
+function setActiveTab(clickedButton) {
+  document.querySelectorAll(".dialog-navbar button").forEach((button) => {
+    button.classList.remove("active");
+  });
+  if (clickedButton) clickedButton.classList.add("active");
+}
+
+function showDetails(index, clickedButton) {
+  setActiveTab(clickedButton);
   let poke = loadedPokemon[index];
   document.getElementById("dialog_detail_container").innerHTML =
     getDetailsHTML(poke);
 }
 
-function showStats(index) {
+function showStats(index, clickedButton) {
+  setActiveTab(clickedButton);
   let poke = loadedPokemon[index];
   document.getElementById("dialog_detail_container").innerHTML =
     getStatsHTML(poke);
 }
 
-function showCall(index) {
+function showCall(index, clickedButton) {
+  setActiveTab(clickedButton);
   let poke = loadedPokemon[index];
   document.getElementById("dialog_detail_container").innerHTML =
     getCallHTML(poke);
+}
+
+function showForms(index, clickedButton) {
+  setActiveTab(clickedButton);
+  let poke = loadedPokemon[index];
+  document.getElementById("dialog_detail_container").innerHTML =
+    getFormsHTML(poke);
 }
 
 //  NAVIGATION, CACHING & SEARCH HELPERS
@@ -280,26 +291,6 @@ function findPokemonIndexByName(pokemonName) {
   return loadedPokemon.findIndex((poke) => poke.name === pokemonName);
 }
 
-//  LOADING SPINNER CONTROLS
-
-function showLoadingSpinner() {
-  let overlay = document.getElementById("loading_popover");
-  if (overlay) {
-    try {
-      overlay.showPopover();
-    } catch (error) {}
-  }
-}
-
-function hideLoadingSpinner() {
-  let overlay = document.getElementById("loading_popover");
-  if (overlay) {
-    try {
-      overlay.hidePopover();
-    } catch (error) {}
-  }
-}
-
 async function handleFooterButtonClick() {
   if (isSearchActive) {
     await resetToMainView();
@@ -319,6 +310,26 @@ async function resetToMainView() {
   currentOffset = 0;
   currentLimit = 20;
   await loadData();
+}
+
+//  LOADING SPINNER CONTROLS
+
+function showLoadingSpinner() {
+  let overlay = document.getElementById("loading_popover");
+  if (overlay) {
+    try {
+      overlay.showPopover();
+    } catch (error) {}
+  }
+}
+
+function hideLoadingSpinner() {
+  let overlay = document.getElementById("loading_popover");
+  if (overlay) {
+    try {
+      overlay.hidePopover();
+    } catch (error) {}
+  }
 }
 
 //  SEARCH FUNCTIONALITY
