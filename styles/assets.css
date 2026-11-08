@@ -4,7 +4,7 @@
     position: relative;
 
     height: 420px;
-    width: 300px;
+    width: clamp(260px, 90vw, 300px);
 
     border: var(--border);
     border-radius: 6px;
@@ -114,8 +114,8 @@ title h2 {
 }
 
 .pokemon-card img {
-    width: 240px;
-    height: 240px;
+    width: clamp(180px, 75vw, 240px);
+    height: auto;
     aspect-ratio: 1;
 
     background-color: var(--background-tertiary);
@@ -160,20 +160,21 @@ title h2 {
 /*  MODAL / DIALOG */
 
 .pokemon-dialog {
+    max-width: 1440px;
+    width: clampt(300px, 80vw, 1000px);
+    height: fit-content;
+
+    padding: 24px;
+    margin: auto;
+
     background-color: var(--background-primary);
 
     border: var(--border);
     border-radius: 24px;
     corner-shape: bevel;
 
-    padding: 24px;
-    margin: auto;
-
     color: white;
 
-    max-width: 1000px;
-    width: 80vw;
-    height: fit-content;
 
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
@@ -418,5 +419,72 @@ tr:last-child th {
 
     100% {
         transform: rotate(360deg);
+    }
+}
+
+/* RESPONSIVNESS */
+
+@media (max-width: 410px) {
+    .dialog-title {
+        flex-direction: column;
+    }
+
+    audio {
+        width: 280px;
+    }
+}
+
+@media (max-width: 676px) {
+    .pokemon-dialog {
+        width: 90vw;
+
+        padding: 16px;
+    }
+
+    .dialog-top {
+        flex-direction: column-reverse;
+        justify-content: center;
+        gap: 12px;
+
+        min-height: auto;
+    }
+
+    .dialog-title {
+        position: static;
+        transform: none;
+        left: auto;
+    }
+
+    .dialog-title h3 {
+        font-size: 1.2rem;
+    }
+
+    .detail-images>img {
+        width: 100%;
+        max-width: 200px;
+        height: auto;
+    }
+
+    .evolution-wrapper {
+        flex-wrap: wrap;
+
+        width: 100%;
+        margin-top: 24px;
+        margin-bottom: 24px;
+    }
+
+    .evo-button {
+        margin: 8px 12px;
+    }
+
+    .dialog-navbar {
+        flex-wrap: wrap;
+    }
+}
+
+@media (max-width: 1020px) {
+    .detail-content {
+        flex-direction: column;
+        align-items: center;
     }
 }

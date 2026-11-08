@@ -45,40 +45,41 @@ function renderTypeIcons(typeIcons) {
 function createPokemonDialogHTML(poke, index) {
   return `
     <section>
-                <div class="dialog-top">
-                    <div class="dialog-title">
-                    <button class="left_button" id="prevButton" onclick="navigatePokemon(${index}, -1)"
-                        aria-label="previous pokemon"><
-                    </button>
+        <div class="dialog-top">
+            <div class="dialog-title">
+                <button class="left_button" id="prevButton" onclick="navigatePokemon(${index}, -1)"
+                    aria-label="previous pokemon">
+                    < </button>
                         <p>#${poke.id}</p>
                         <h3>${poke.name}</h3>
-                        <button class="right_button" id="nextButton" onclick="navigatePokemon(${index}, 1)" aria-label="next pokemon">
-                        >
-                    </button>
-                    </div>
-                    <button onclick="closeModal()">Close</button>
-                </div>
-                <div class="detail-content">
-                    <div class="detail-images">
-                        <img src="${poke.sprites.other.home.front_default}" alt="${poke.name}">
+                        <button class="right_button" id="nextButton" onclick="navigatePokemon(${index}, 1)"
+                            aria-label="next pokemon">
+                            >
+                        </button>
+            </div>
+            <button onclick="closeModal()">Close</button>
+        </div>
+        <div class="detail-content">
+            <div class="detail-images">
+                <img src="${poke.sprites.other.home.front_default}" alt="${poke.name}">
 
-                        ${renderEvolutionChain(poke.evolutionChain)}
-                    </div>
-                    <div class="detail-infos">
-                        <h4>Description: </h4>
-                        <p class="entry-text">${poke.flavorText}</p>
-                        <nav class="dialog-navbar">
-                            <button class="active" onclick="showDetails(${index}, event.target)">Details</button>
-                            <button onclick="showStats(${index}, event.target)">Stats</button>
-                            <button onclick="showCall(${index}, event.target)">Call</button>
-                            <button onclick="showForms(${index}, event.target)">Forms</button>
-                        </nav>
-                        <div id="dialog_detail_container">
-                            ${getDetailsHTML(poke)}
-                        </div>
-                    </div>
+                ${renderEvolutionChain(poke.evolutionChain)}
+            </div>
+            <div class="detail-infos">
+                <h4>Description: </h4>
+                <p class="entry-text">${poke.flavorText}</p>
+                <nav class="dialog-navbar">
+                    <button class="active" onclick="showDetails(${index}, event.target)">Details</button>
+                    <button onclick="showStats(${index}, event.target)">Stats</button>
+                    <button onclick="showCall(${index}, event.target)">Call</button>
+                    <button onclick="showForms(${index}, event.target)">Forms</button>
+                </nav>
+                <div id="dialog_detail_container">
+                    ${getDetailsHTML(poke)}
                 </div>
-            </section>
+            </div>
+        </div>
+    </section>
     `;
 }
 
