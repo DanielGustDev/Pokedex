@@ -53,8 +53,9 @@
             </div>
 
             <div class="header-bottom">
-                <input type="text" class="pokedex-search" data-id="search-input" placeholder="find Pokémon...">
-                <button class="search-button" data-id="search-button">Search</button>
+                <label for="pokemon-search">Search Pokémon</label>
+                <input type="text" class="pokedex-search" data-id="search-input" placeholder="Find Pokémon...">
+                <button class="search-button" data-id="search-button" aria-label="Search Pokémon">Search</button>
             </div>
 
             <svg class="header-step-line" viewBox="0 0 500 110" preserveAspectRatio="none">
@@ -66,7 +67,8 @@
             <section class="card-grid">
             </section>
         </main>
-        <dialog id="pokemon_dialog" class="pokemon-dialog" data-id="dialog" onclick="this.close()">
+        <dialog id="pokemon_dialog" class="pokemon-dialog" data-id="dialog" aria-labelledby="dialog-title"
+            aria-modal="true" onclick="this.close()">
             <div id="modal_body" data-id="overlay-pokemon-name" onclick="event.stopPropagation()"></div>
         </dialog>
         <footer>
@@ -82,7 +84,8 @@
             </div>
         </footer>
     </div>
-    <div id="loading_popover" class="loading-spinner-wrapper" popover="manual">
+    <div id="loading_popover" class="loading-spinner-wrapper" popover="manual" role="status" aria-live="polite"
+        aria-label="Loading Pokémon">
         <div class="loading-popover-content">
             <h3>Loading Pokèmon...</h3>
             <svg class="loading-spinner" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">

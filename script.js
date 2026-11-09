@@ -260,10 +260,17 @@ async function renderDetailTab(pokemonId, clickedButton, template) {
 }
 
 function setActiveTab(clickedButton) {
-  document.querySelectorAll(".dialog-navbar button").forEach((button) => {
+  const tabButtons = document.querySelectorAll(".dialog-navbar button");
+
+  tabButtons.forEach((button) => {
     button.classList.remove("active");
+    button.classList.setAttribute("aria-selected", "false");
   });
-  if (clickedButton) clickedButton.classList.add("active");
+
+  if (clickedButton) {
+    clickedButton.classList.add("active");
+    clickedButton.setAttribute("aria-selected", "true");
+  }
 }
 
 async function showDetails(pokemonId, clickedButton) {

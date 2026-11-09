@@ -16,12 +16,12 @@ function createPokemonCardHTML(poke) {
   let cardData = getPokemonData(poke);
 
   return `
-  <button class="pokemon-card type-${cardData.primaryType}" data-id="card" onclick='openPokemonModal(${cardData.id})'>
+  <button class="pokemon-card type-${cardData.primaryType}" data-id="card" aria-label="Open ${cardData.name}, Pokémon number ${cardData.id}" onclick="openPokemonModal(${cardData.id})"'>
                 <div class="title">
                     <p>#${cardData.id}</p>
                     <h2>${cardData.name}</h2>
                 </div>
-                    <img data-id="card-image" src="${cardData.image}" alt="${cardData.name}">
+                    <img data-id="card-image" src="${cardData.image}" alt="${cardData.name} artwork">
                 <div class="type-container">
                     ${cardData.typeIconsHTML}
                 </div>
@@ -47,32 +47,30 @@ function createPokemonDialogHTML(poke) {
     <section data-id="overly-pokemon-name">
         <div class="dialog-top">
             <div class="dialog-title">
-                <button class="left_button" id="prevButton" data-id="prev-button" onclick="navigatePokemon(${poke.id}, -1)"
-                    aria-label="previous pokemon">
+                <button class="left_button" id="prevButton" data-id="prev-button" aria-label="Previous Pokémon" onclick="navigatePokemon(${poke.id}, -1)">
                     < </button>
                         <p>#${poke.id}</p>
                         <h3>${poke.name}</h3>
-                        <button class="right_button" id="nextButton" data-id="next-button" onclick="navigatePokemon(${poke.id}, 1)"
-                            aria-label="next pokemon">
+                        <button class="right_button" id="nextButton" data-id="next-button" aria-label="Next Pokémon" onclick="navigatePokemon(${poke.id}, 1)">
                             >
                         </button>
             </div>
-            <button data-id="close-dialog-button" onclick="closeModal()">Close</button>
+            <button data-id="close-dialog-button" aria-label="Close Pokémon Details"onclick="closeModal()">Close</button>
         </div>
         <div class="detail-content">
             <div class="detail-images">
-                <img data-id="dialog-image" src="${poke.sprites.other.home.front_default}" alt="${poke.name}">
+                <img data-id="dialog-image" src="${poke.sprites.other.home.front_default}" alt="${poke.name} artwork">
 
                 ${renderEvolutionChain(poke.evolutionChain)}
             </div>
             <div class="detail-infos">
                 <h4>Description: </h4>
                 <p class="entry-text">${poke.flavorText}</p>
-                <nav class="dialog-navbar">
-                    <button class="active" onclick="showDetails(${poke.id}, event.target)">Details</button>
-                    <button onclick="showStats(${poke.id}, event.target)">Stats</button>
-                    <button onclick="showCall(${poke.id}, event.target)">Call</button>
-                    <button onclick="showForms(${poke.id}, event.target)">Forms</button>
+                <nav class="dialog-navbar" role="tablist" aria-label="Pokémon Information">
+                    <button class="active" role="tab" aria-selected="true" aria-controls="dialog_detail-container" onclick="showDetails(${(poke.id, this)})">Details</button>
+                    <button role="tab" aria-selected="false" aria-controls="dialog_detail-container" onclick="showStats(${(poke.id, this)})">Stats</button>
+                    <button role="tab" aria-selected="false" aria-controls="dialog_detail-container" onclick="showCall(${(poke.id, this)})">Call</button>
+                    <button role="tab" aria-selected="false" aria-controls="dialog_detail-container" onclick="showForms(${(poke.id, this)})">Forms</button>
                 </nav>
                 <div id="dialog_detail_container">
                     ${getDetailsHTML(poke)}

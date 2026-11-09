@@ -176,11 +176,22 @@ header {
     white-space: nowrap;
 }
 
+label {
+    padding: 6px;
+
+    font-family: 'Press Start 2P';
+    font-weight: bold;
+    font-size: 0, 9rem;
+
+    text-shadow: 0 -2px 2px rgba(0, 0, 0, 0.7), 0 2px 2px rgba(255, 255, 255, 0.4);
+}
+
 .pokedex-search {
     order: 1;
 
     color: var(--font-primary);
     font-family: 'Press Start 2P';
+    font-size: 0, 9rem;
 
     background-color: var(--background-primary);
     border: 2px solid rgba(252, 249, 249, 0.4);
