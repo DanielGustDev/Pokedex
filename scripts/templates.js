@@ -67,10 +67,10 @@ function createPokemonDialogHTML(poke) {
                 <h4>Description: </h4>
                 <p class="entry-text">${poke.flavorText}</p>
                 <nav class="dialog-navbar" role="tablist" aria-label="Pokémon Information">
-                    <button class="active" role="tab" aria-selected="true" aria-controls="dialog_detail-container" onclick="showDetails(${(poke.id, this)})">Details</button>
-                    <button role="tab" aria-selected="false" aria-controls="dialog_detail-container" onclick="showStats(${(poke.id, this)})">Stats</button>
-                    <button role="tab" aria-selected="false" aria-controls="dialog_detail-container" onclick="showCall(${(poke.id, this)})">Call</button>
-                    <button role="tab" aria-selected="false" aria-controls="dialog_detail-container" onclick="showForms(${(poke.id, this)})">Forms</button>
+                    <button class="active" role="tab" aria-selected="true" aria-controls="dialog_detail_container" onclick="showDetails(${poke.id}, this)">Details</button>
+                    <button role="tab" aria-selected="false" aria-controls="dialog_detail_container" onclick="showStats(${poke.id}, this)">Stats</button>
+                    <button role="tab" aria-selected="false" aria-controls="dialog_detail_container" onclick="showCall(${poke.id}, this)">Call</button>
+                    <button role="tab" aria-selected="false" aria-controls="dialog_detail_container" onclick="showForms(${poke.id}, this)">Forms</button>
                 </nav>
                 <div id="dialog_detail_container">
                     ${getDetailsHTML(poke)}

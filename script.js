@@ -264,7 +264,7 @@ function setActiveTab(clickedButton) {
 
   tabButtons.forEach((button) => {
     button.classList.remove("active");
-    button.classList.setAttribute("aria-selected", "false");
+    button.setAttribute("aria-selected", "false");
   });
 
   if (clickedButton) {
