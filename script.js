@@ -91,36 +91,38 @@ async function fetchPokemon(url) {
   return pokemon;
 }
 
-async function ensurePokemonDetails(poke) {
-  if (poke.flavorText && poke.evolutionChain) return;
+async function ensurePokemonDetails(pokemon) {
+  if (pokemon.detailLoaded) return;
 
-  let speciesData = await fetchPokemonSpecies(poke.species.url);
-  poke.flavorText = extractFlavorText(speciesData);
-  poke.evolutionChain = await fetchEvolutionChain(
+  const speciesData = await fetchJson(pokemon.species.url);
+
+  pokemon.flavorText = extractFlavorText(speciesData);
+  pokemon.evolutionChain = await fetchEvolutionChain(
     speciesData.evolution_chain.url,
   );
-  poke.formsList = await fetchPokemonForms(speciesData.varieties);
-}
+  pokemon.formsList = await fetchPokemonForms(speciesData.varieties);
 
-async function fetchPokemonSpecies(speciesUrl) {
-  return fetchJson(speciesUrl);
+  pokemon.detailLoaded = true;
 }
 
 async function fetchPokemonForms(varieties) {
   if (!varieties || varieties.length <= 1) return [];
-  let formPromises = varieties.map(async (variety) => {
-    let response = await fetch(variety.pokemon.url);
-    let details = await response.json();
-    return { name: variety.pokemon.name, image: details.sprites.front_default };
-  });
-  return await Promise.all(formPromises);
+  return Promise.all(varieties.map(fetchPokemonForm));
+}
+
+async function fetchPokemonForm(varietiy) {
+  const details = await fetchJson(varietiy.pokemon.url);
+
+  return {
+    name: varietiy.pokemon.name,
+    image: details.sprites.front_default,
+  };
 }
 
 //  EVOLUTION CHAIN PARSING
 
 async function fetchEvolutionChain(evolutionChainUrl) {
-  let response = await fetch(evolutionChainUrl);
-  let chainData = await response.json();
+  let chainData = await fetchJson(evolutionChainUrl);
   let evolutionList = [];
 
   await parseEvolutionStep(chainData.chain, evolutionList);
@@ -139,8 +141,7 @@ async function parseEvolutionStep(step, evolutionList) {
 
 async function addEvolutionPokemon(step, evolutionList) {
   let url = `${BASE_URL}${step.species.name}`;
-  let response = await fetch(url);
-  let details = await response.json();
+  let details = await fetchJson(url);
 
   evolutionList.push({
     name: step.species.name,
