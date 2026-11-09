@@ -161,7 +161,7 @@ title h2 {
 
 .pokemon-dialog {
     max-width: 1440px;
-    width: clampt(300px, 80vw, 1000px);
+    width: clamp(300px, 80vw, 1000px);
     height: fit-content;
 
     padding: 24px;
@@ -389,16 +389,12 @@ tr:last-child th {
 }
 
 .loading-popover-content {
-    background: rgba(0, 0, 0, 0.3);
-
     padding: 30px 40px;
 
     border-radius: 16px;
 
     text-align: center;
     color: var(--font-primary);
-
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
 }
 
 .loading-spinner {

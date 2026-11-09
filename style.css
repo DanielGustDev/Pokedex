@@ -5,6 +5,7 @@
     width: 100%;
     max-width: 1980px;
     height: auto;
+    min-height: 100dvh;
 
     padding: 0;
 
@@ -240,6 +241,10 @@ header {
     pointer-events: auto;
 
     transform: translateX(0);
+}
+
+.no-results {
+    color: var(--font-primary);
 }
 
 .pokedex-screen {
