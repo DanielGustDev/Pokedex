@@ -108,7 +108,7 @@
     border-radius: 4px;
 }
 
-title h2 {
+.title h2 {
     text-align: center;
     word-break: break-word;
 }
@@ -272,7 +272,7 @@ title h2 {
     width: 100%;
     height: 250px;
     min-height: 250px;
-    max-height: 150px;
+    max-height: 250px;
 
     font-family: 'Press Start 2P';
 
@@ -284,7 +284,7 @@ title h2 {
 }
 
 .dialog-details th,
-td {
+.dialog-details td {
     text-align: start;
 
     border-right: var(--border);
@@ -331,6 +331,7 @@ tr:last-child th {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
+    gap: 12px;
 }
 
 .evo-button {
