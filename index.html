@@ -53,8 +53,8 @@
             </div>
 
             <div class="header-bottom">
-                <input type="text" class="pokedex-search" placeholder="find Pokémon...">
-                <button class="search-button">Search</button>
+                <input type="text" class="pokedex-search" data-id="search-input" placeholder="find Pokémon...">
+                <button class="search-button" data-id="search-button">Search</button>
             </div>
 
             <svg class="header-step-line" viewBox="0 0 500 110" preserveAspectRatio="none">
@@ -62,12 +62,12 @@
                     stroke-linecap="round" stroke-linejoin="round" />
             </svg>
         </header>
-        <main class="pokedex-screen">
+        <main class="pokedex-screen" data-id="content">
             <section class="card-grid">
             </section>
         </main>
-        <dialog id="pokemon_dialog" class="pokemon-dialog" onclick="this.close()">
-            <div id="modal_body" onclick="event.stopPropagation()"></div>
+        <dialog id="pokemon_dialog" class="pokemon-dialog" data-id="dialog" onclick="this.close()">
+            <div id="modal_body" data-id="overlay-pokemon-name" onclick="event.stopPropagation()"></div>
         </dialog>
         <footer>
             <div class="footer-controls">
@@ -76,7 +76,8 @@
                     <option value="50">50</option>
                     <option value="100">100</option>
                 </select>
-                <button onclick="handleFooterButtonClick()" class="load-more-button" id="load_more_button">Load
+                <button onclick="handleFooterButtonClick()" class="load-more-button" id="load_more_button"
+                    data-id="load-more-button">Load
                     More</button>
             </div>
         </footer>

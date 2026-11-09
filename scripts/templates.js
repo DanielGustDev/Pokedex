@@ -16,12 +16,12 @@ function createPokemonCardHTML(poke) {
   let cardData = getPokemonData(poke);
 
   return `
-  <button class="pokemon-card type-${cardData.primaryType}" onclick='openPokemonModal(${cardData.id})'>
+  <button class="pokemon-card type-${cardData.primaryType}" data-id="card" onclick='openPokemonModal(${cardData.id})'>
                 <div class="title">
                     <p>#${cardData.id}</p>
                     <h2>${cardData.name}</h2>
                 </div>
-                    <img src="${cardData.image}" alt="${cardData.name}">
+                    <img data-id="card-image" src="${cardData.image}" alt="${cardData.name}">
                 <div class="type-container">
                     ${cardData.typeIconsHTML}
                 </div>
@@ -44,24 +44,24 @@ function renderTypeIcons(typeIcons) {
 
 function createPokemonDialogHTML(poke) {
   return `
-    <section>
+    <section data-id="overly-pokemon-name">
         <div class="dialog-top">
             <div class="dialog-title">
-                <button class="left_button" id="prevButton" onclick="navigatePokemon(${poke.id}, -1)"
+                <button class="left_button" id="prevButton" data-id="prev-button" onclick="navigatePokemon(${poke.id}, -1)"
                     aria-label="previous pokemon">
                     < </button>
                         <p>#${poke.id}</p>
                         <h3>${poke.name}</h3>
-                        <button class="right_button" id="nextButton" onclick="navigatePokemon(${poke.id}, 1)"
+                        <button class="right_button" id="nextButton" data-id="next-button" onclick="navigatePokemon(${poke.id}, 1)"
                             aria-label="next pokemon">
                             >
                         </button>
             </div>
-            <button onclick="closeModal()">Close</button>
+            <button data-id="close-dialog-button" onclick="closeModal()">Close</button>
         </div>
         <div class="detail-content">
             <div class="detail-images">
-                <img src="${poke.sprites.other.home.front_default}" alt="${poke.name}">
+                <img data-id="dialog-image" src="${poke.sprites.other.home.front_default}" alt="${poke.name}">
 
                 ${renderEvolutionChain(poke.evolutionChain)}
             </div>

@@ -176,7 +176,7 @@ async function loadIcons(typesArray) {
 }
 
 async function fetchSingleType(typeUrl) {
-  let typeData = await fetch.Json(typeUrl);
+  let typeData = await fetchJson(typeUrl);
 
   return {
     name: typeData.name,
@@ -396,7 +396,7 @@ async function renderSearchResults(matches) {
 function renderNoSearchResults() {
   const cardGrid = document.querySelector(".card-grid");
 
-  cardGrid.innerHTML = `<p class="no-results">No Pokémon found.</p>`;
+  cardGrid.innerHTML = `<p class="no-results" data-id="not-found">No Pokémon found.</p>`;
 }
 
 function prepareSearchView() {
