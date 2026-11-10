@@ -450,6 +450,7 @@ tr:last-child th {
         position: static;
         transform: none;
         left: auto;
+        white-space: wrap;
     }
 
     .dialog-title h3 {
