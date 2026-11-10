@@ -328,6 +328,22 @@ async function resetToMainView() {
   await loadData();
 }
 
+function scrollToTop() {
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function updateScrollVisibility() {
+  const button = document.getElementById("scroll_to_top");
+  if (!button) return;
+
+  const dialogOpen = document.getElementById("pokemon_dialog")?.open;
+
+  button.classList.toggle(
+    "show",
+    window.scrollY > 300 && !dialogOpen && !isSearchActive,
+  );
+}
+
 //  LOADING SPINNER CONTROLS
 
 function showLoadingSpinner() {
@@ -439,3 +455,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+
+window.addEventListener("scroll", updateScrollVisibility);
+document.addEventListener("focusin", updateScrollVisibility);
+document.addEventListener("focusout", updateScrollVisibility);

@@ -192,11 +192,14 @@
     display: flex;
     align-items: center;
     justify-content: flex-end;
-
-    position: relative;
+    gap: 8px;
 
     width: 100%;
     min-height: 40px;
+}
+
+.close-button {
+    flex-shrink: 0;
 }
 
 .dialog-title {
@@ -204,20 +207,17 @@
     justify-content: center;
     align-items: center;
     gap: 8px;
+    flex: 1;
 
-    position: absolute;
-    left: 50%;
-
-    transform: translate(-50%);
+    min-width: 0;
 }
 
 .dialog-title h3 {
-    min-width: 140px;
-
-    margin: 0;
-
     text-align: center;
-    white-space: nowrap;
+    white-space: normal;
+    word-break: break-word;
+
+    overflow-wrap: break-word;
 }
 
 .detail-content {

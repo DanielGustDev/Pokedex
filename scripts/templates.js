@@ -55,7 +55,7 @@ function createPokemonDialogHTML(poke) {
                             >
                         </button>
             </div>
-            <button data-id="close-dialog-button" aria-label="Close Pokémon Details"onclick="closeModal()">Close</button>
+            <button class="close-button" data-id="close-dialog-button" aria-label="Close Pokémon Details"onclick="closeModal()">Close</button>
         </div>
         <div class="detail-content">
             <div class="detail-images">
