@@ -377,8 +377,10 @@ function hideLoadingSpinner() {
 
 async function handleSearch() {
   let query = getSearchQuery();
-  if (query.length < 3) return;
-
+  if (query.length < 3) {
+    showSearchError();
+    return;
+  }
   showLoadingSpinner();
   try {
     let allPokemon = await fetchAllPokemonNames();
@@ -446,6 +448,12 @@ async function fetchSearchPokemon(matches) {
 
 function displaySearchPokemon(pokemonData) {
   displayPokemonCards(pokemonData);
+}
+
+function showSearchError() {
+  const cardGrid = document.querySelector(".card-grid");
+
+  cardGrid.innerHTML = `<p class="no-results">Please enter at least 3 characters.</p>`;
 }
 
 //  EVENT LISTENER
