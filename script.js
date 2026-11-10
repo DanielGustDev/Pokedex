@@ -233,6 +233,7 @@ async function openPokemonModal(pokemonId) {
   try {
     const pokemon = await getPokemon(pokemonId);
     await ensurePokemonDetails(pokemon);
+    await preloadImage(pokemon.sprites.other.home.front_default);
     renderPokemonModal(pokemon, dialog);
   } finally {
     hideLoadingSpinner();
@@ -240,10 +241,18 @@ async function openPokemonModal(pokemonId) {
 }
 
 function renderPokemonModal(pokemon, dialog) {
-  document.getElementById("modal_body").innerHTML =
-    createPokemonDialogHTML(pokemon);
+  const modalBody = document.getElementById("modal_body");
+  const newHTML = createPokemonDialogHTML(pokemon);
+
+  modalBody.innerHTML = newHTML;
 
   if (!dialog.open) dialog.showModal();
+}
+
+async function preloadImage(url) {
+  const image = new Image();
+  image.src = url;
+  await image.decode();
 }
 
 function closeModal() {
