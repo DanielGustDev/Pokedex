@@ -200,12 +200,12 @@ header {
 }
 
 legend {
-    padding: 0 4px;
+    padding-right: 16px;
 
     font-family: 'Press Start 2P';
-    font-weight: bold;
-    font-size: 0.7rem;
+    font-size: 0.75rem;
     color: var(--font-primary);
+    white-space: nowrap;
 
     text-shadow: 0 -2px 2px rgba(0, 0, 0, 0.7), 0 2px 2px rgba(255, 255, 255, 0.4);
 }
@@ -377,14 +377,18 @@ footer {
         height: auto;
     }
 
+    .headline {
+        margin-left: 0;
+    }
+
     .header-bottom {
         width: 150px;
 
         margin-top: 24px;
     }
 
-    .headline {
-        margin-left: 0;
+    legend {
+        white-space: normal;
     }
 }
 

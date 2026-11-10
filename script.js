@@ -4,7 +4,7 @@
 
 const BASE_URL = "https://pokeapi.co/api/v2/pokemon/";
 let currentOffset = 0;
-let currentLimit = 20;
+let currentLimit = 30;
 let loadedPokemon = [];
 let cachedAllPokemon = null;
 let isSearchActive = false;
