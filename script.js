@@ -67,7 +67,6 @@ function setLoadButtonState(loadButton, loading) {
 
 function changeLimit(newLimit) {
   currentLimit = Number(newLimit);
-  currentOffset = 0;
 }
 
 //  API FETCHING & LAZY LOADING (DETAILS)
