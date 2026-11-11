@@ -206,7 +206,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 8px;
+    gap: 12px;
     flex: 1;
 
     min-width: 0;
@@ -360,7 +360,7 @@ tr:last-child th {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-    gap: 12px;
+    gap: 24px;
 }
 
 .evo-button {
@@ -482,7 +482,11 @@ tr:last-child th {
         white-space: wrap;
     }
 
-    .dialog-title h3 {
+    .id-name {
+        flex-direction: column;
+    }
+
+    .id-name h3 {
         font-size: 1.2rem;
     }
 
