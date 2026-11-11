@@ -605,11 +605,11 @@ tr:last-child th {
         white-space: wrap;
     }
 
-    .id-name {
+    .id-and-name {
         flex-direction: column;
     }
 
-    .id-name h3 {
+    .id-and-name h3 {
         font-size: 1.2rem;
     }
 
