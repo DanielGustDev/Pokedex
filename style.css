@@ -168,6 +168,10 @@ header {
     white-space: nowrap;
 }
 
+.search-form {
+    display: contents;
+}
+
 .header-bottom {
     display: flex;
     align-items: center;

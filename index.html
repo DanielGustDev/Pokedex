@@ -64,12 +64,13 @@
                     </div>
                 </div>
             </div>
-            <form onsubmit="handleSearch(event)">
+            <form class="search-form" onsubmit="handleSearch(event)">
                 <fieldset class="header-bottom">
                     <legend>Search Pokémon</legend>
                     <input type="search" class="pokedex-search" data-id="search-input"
                         aria-label="input Pokémon to search">
-                    <button class="search-button" data-id="search-button" aria-label="Search Pokémon">Search</button>
+                    <button type="submit" class="search-button" data-id="search-button"
+                        aria-label="Search Pokémon">Search</button>
                 </fieldset>
             </form>
             <svg class="header-step-line" viewBox="0 0 500 110" preserveAspectRatio="none">
