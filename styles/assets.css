@@ -459,6 +459,12 @@ tr:last-child th {
     padding: 4px 8px;
 }
 
+.form-wrapper {
+    height: fit-content;
+    overflow: hidden;
+
+    border: none;
+}
 
 /* EVOLUTION CHAIN */
 

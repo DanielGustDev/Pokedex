@@ -161,7 +161,7 @@ function getCallHTML(poke) {
 
 function getFormsHTML(poke) {
   if (!poke.formsList || poke.formsList.length <= 1) {
-    return `<div class="dialog-callbox dialog-details"><p>No alternative forms known.</p></div>`;
+    return `<div class="dialog-details"><p>No alternative forms known.</p></div>`;
   }
   let buttonHtml = poke.formsList
     .map(
@@ -173,7 +173,7 @@ function getFormsHTML(poke) {
     )
     .join("");
 
-  return `<div class="dialog-details evolution-wrapper" style="width: 100%; margin: 0; border: none; height: auto;">
+  return `<div class="dialog-details form-wrapper">
             <div class="evo-chain">${buttonHtml}</div>
           </div>`;
 }
