@@ -374,7 +374,8 @@ function hideLoadingSpinner() {
 
 //  SEARCH FUNCTIONALITY
 
-async function handleSearch() {
+async function handleSearch(event) {
+  if (event) event.preventDefault();
   let query = getSearchQuery();
   if (query.length < 3) {
     showSearchError();
