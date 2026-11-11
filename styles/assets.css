@@ -212,7 +212,36 @@
     min-width: 0;
 }
 
-.dialog-title h3 {
+.left_button,
+.right_button,
+.scroll-top-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 36px;
+    height: 24px;
+
+    padding: 0;
+}
+
+.left_button svg,
+.right_button svg,
+.scroll-top-button {
+    display: block;
+
+    width: 24px;
+    height: 24px;
+}
+
+.id-name {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.id-name h3 {
     text-align: center;
     white-space: normal;
     word-break: break-word;
