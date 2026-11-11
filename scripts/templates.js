@@ -161,7 +161,7 @@ function getCallHTML(poke) {
 
 function getFormsHTML(poke) {
   if (!poke.formsList || poke.formsList.length <= 1) {
-    return `<div class="dialog-details"><p>No alternative forms known.</p></div>`;
+    return `<div class="dialog-details no-forms"><p>No alternative forms known.</p></div>`;
   }
   let buttonHtml = poke.formsList
     .map(

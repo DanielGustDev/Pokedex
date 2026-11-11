@@ -466,6 +466,15 @@ tr:last-child th {
     border: none;
 }
 
+.no-forms {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    padding: 4px 8px;
+}
+
 /* EVOLUTION CHAIN */
 
 .evolution-wrapper {
