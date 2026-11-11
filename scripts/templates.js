@@ -80,7 +80,7 @@ function createPokemonDialogHTML(poke) {
                 </div>
                 <div class="detail-content">
                     <div class="detail-images">
-                        <img data-id="dialog-image" src="${poke.sprites.other.home.front_default}"
+                        <img class="main-images type-${poke.types[0].type.name}" data-id="dialog-image" src="${poke.sprites.other.home.front_default}"
                             alt="${poke.name} artwork">
 
                         ${renderEvolutionChain(poke.evolutionChain)}

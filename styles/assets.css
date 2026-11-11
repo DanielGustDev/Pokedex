@@ -259,8 +259,101 @@
     align-items: center;
 }
 
-.detail-images>img {
+.main-images {
     width: 300px;
+
+    padding: 12px;
+    margin-top: 12px;
+}
+
+.main-images.type-normal {
+    border: 6px solid rgb(209, 204, 202);
+    border-radius: 50%;
+}
+
+.main-images.type-fire {
+    border: 6px solid rgb(245, 57, 24);
+    border-radius: 50%;
+}
+
+.main-images.type-water {
+    border: 6px solid rgb(11, 138, 178);
+    border-radius: 50%;
+}
+
+.main-images.type-grass {
+    border: 6px solid rgb(106, 158, 0);
+    border-radius: 50%;
+}
+
+.main-images.type-electric {
+    border: 6px solid rgb(247, 224, 36);
+    border-radius: 50%;
+}
+
+.main-images.type-ice {
+    border: 6px solid rgb(169, 197, 197);
+    border-radius: 50%;
+}
+
+.main-images.type-fighting {
+    border: 6px solid rgb(153, 67, 2);
+    border-radius: 50%;
+}
+
+.main-images.type-poison {
+    border: 6px solid rgb(120, 55, 116);
+    border-radius: 50%;
+}
+
+.main-images.type-ground {
+    border: 6px solid rgb(211, 189, 151);
+    border-radius: 50%;
+}
+
+.main-images.type-flying {
+    border: 6px solid rgb(243, 243, 242);
+    border-radius: 50%;
+}
+
+.main-images.type-psychic {
+    border: 6px solid rgb(225, 21, 130);
+    border-radius: 50%;
+}
+
+.main-images.type-bug {
+    border: 6px solid rgb(153, 147, 71);
+    border-radius: 50%;
+}
+
+.main-images.type-rock {
+    border: 6px solid rgb(124, 86, 49);
+    border-radius: 50%;
+}
+
+.main-images.type-ghost {
+    border: 6px solid rgb(100, 96, 128);
+    border-radius: 50%;
+}
+
+.main-images.type-dragon {
+    border: 6px solid rgb(37, 83, 106);
+    border-radius: 50%;
+}
+
+.main-images.type-dark {
+    border: 6px solid rgb(61, 67, 71);
+    border-radius: 50%;
+}
+
+.main-images.type-steel {
+    border: 6px solid rgb(141, 170, 191);
+    border-radius: 50%;
+}
+
+.main-images.type-fairy {
+    border: 6px solid rgb(247, 189, 201);
+    border-radius: 50%;
 }
 
 .detail-infos {
