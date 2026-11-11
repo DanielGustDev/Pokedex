@@ -377,10 +377,12 @@ function hideLoadingSpinner() {
 async function handleSearch(event) {
   if (event) event.preventDefault();
   let query = getSearchQuery();
-  if (query.length < 3) {
-    showSearchError();
-    return;
-  }
+  if (query.length < 3) return;
+  showSearchError();
+  await executeSearch(query);
+}
+
+async function executeSearch(query) {
   showLoadingSpinner();
   try {
     let allPokemon = await fetchAllPokemonNames();
