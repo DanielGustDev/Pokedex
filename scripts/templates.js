@@ -58,7 +58,7 @@ function createPokemonDialogHTML(poke) {
                                     <rect x="8" y="7" width="4" height="2" />
                                 </g>
                             </svg></button>
-                        <div class="id-name">
+                        <div class="id-and-name">
                             <p>#${poke.id}</p>
                             <h3>${poke.name}</h3>
                         </div>

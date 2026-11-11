@@ -271,6 +271,7 @@ legend {
 
 .no-results {
     color: var(--font-primary);
+    line-height: 150%;
 }
 
 .pokedex-screen {

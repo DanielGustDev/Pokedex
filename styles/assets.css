@@ -161,7 +161,7 @@
 
 .pokemon-dialog {
     max-width: 1440px;
-    width: clamp(300px, 80vw, 1000px);
+    width: clamp(300px, 96vw, 1000px);
     height: fit-content;
 
     padding: 24px;
@@ -190,8 +190,8 @@
 
 .dialog-top {
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    justify-content: flex-end;
     gap: 8px;
 
     width: 100%;
@@ -204,12 +204,12 @@
 
 .dialog-title {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
-    gap: 12px;
-    flex: 1;
+    gap: 8px;
+    flex-shrink: 0;
 
-    min-width: 0;
+    width: clamp(250px, 70vw, 560px);
 }
 
 .left_button,
@@ -218,6 +218,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-shrink: 0;
 
     width: 36px;
     height: 24px;
@@ -234,14 +235,19 @@
     height: 24px;
 }
 
-.id-name {
+.id-and-name {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
+    flex: 1;
+
+    min-width: 0;
+
+    text-align: center;
 }
 
-.id-name h3 {
+.id-and-name h3 {
     text-align: center;
     white-space: normal;
     word-break: break-word;
@@ -260,10 +266,11 @@
 }
 
 .main-images {
-    width: 300px;
+    width: clamp(250px, 50vw, 320px);
 
     padding: 12px;
     margin-top: 12px;
+    margin-right: 12px;
 }
 
 .main-images.type-normal {
@@ -379,14 +386,13 @@
     flex-direction: column;
     justify-content: flex-start;
     gap: 8px;
+    flex: 1;
+
+    line-height: 150%;
 }
 
 .detail-infos h4 {
     margin-top: 16px;
-}
-
-.detail-infos {
-    line-height: 150%;
 }
 
 .detail-infos>p {
@@ -625,6 +631,14 @@ tr:last-child th {
 }
 
 @media (max-width: 1020px) {
+    .dialog-top {
+        flex-direction: column-reverse;
+        justify-content: center;
+        gap: 12px;
+
+        min-height: auto;
+    }
+
     .detail-content {
         flex-direction: column;
         align-items: center;
