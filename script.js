@@ -84,13 +84,14 @@ function changeLimit(newLimit) {
 //  API FETCHING & LAZY LOADING (DETAILS)
 
 async function fetchJson(url) {
-  const response = await fetch(url);
-
-  if (!response.ok) {
-    throw new Error(`Failed to fetch Pokemon: ${response.status}`);
+  try {
+    const response = await fetch(url);
+    if (!response.ok) throw new Error(`API Error: ${response.status}`);
+    return await response.json();
+  } catch (error) {
+    console.error("Fetch failed:", url, error);
+    throw error;
   }
-
-  return await response.json();
 }
 
 async function fetchPokemon(url) {
@@ -138,11 +139,11 @@ async function fetchPokemonForms(varieties) {
 }
 
 async function fetchPokemonForm(varietiy) {
-  const details = await fetchJson(varietiy.pokemon.url);
+  const pokemon = await getPokemon(varietiy.pokemon.name);
 
   return {
     name: varietiy.pokemon.name,
-    image: details.sprites.front_default,
+    image: pokemon.sprites.front_default,
   };
 }
 
@@ -167,12 +168,11 @@ async function parseEvolutionStep(step, evolutionList) {
 }
 
 async function addEvolutionPokemon(step, evolutionList) {
-  let url = `${BASE_URL}${step.species.name}`;
-  let details = await fetchJson(url);
+  const pokemon = await getPokemon(step.species.name);
 
   evolutionList.push({
-    name: step.species.name,
-    image: details.sprites.front_default,
+    name: pokemon.name,
+    image: pokemon.sprites.front_default,
   });
 }
 
@@ -263,9 +263,13 @@ function renderPokemonModal(pokemon, dialog) {
 }
 
 async function preloadImage(url) {
-  const image = new Image();
-  image.src = url;
-  await image.decode();
+  try {
+    const image = new Image();
+    image.src = url;
+    await image.decode();
+  } catch (error) {
+    console.warn("Image preload failed:", url, error);
+  }
 }
 
 function closeModal() {
@@ -391,8 +395,7 @@ function hideLoadingSpinner() {
 async function handleSearch(event) {
   if (event) event.preventDefault();
   let query = getSearchQuery();
-  if (query.length < 3) return;
-  showSearchError();
+  if (query.length < 3) return showSearchError();
   await executeSearch(query);
 }
 
