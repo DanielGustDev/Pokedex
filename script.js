@@ -168,11 +168,11 @@ async function parseEvolutionStep(step, evolutionList) {
 }
 
 async function addEvolutionPokemon(step, evolutionList) {
-  const pokemon = await getPokemon(step.species.name);
-
+  const id = step.species.url.split("/").filter(Boolean).pop();
+  let details = await fetchJson(`${BASE_URL}${id}`);
   evolutionList.push({
-    name: pokemon.name,
-    image: pokemon.sprites.front_default,
+    name: details.name,
+    image: details.sprites.front_default,
   });
 }
 
