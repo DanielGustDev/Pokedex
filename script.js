@@ -18,6 +18,8 @@ async function loadData() {
     await renderPokemonList(data.results);
 
     currentOffset += data.results.length;
+  } catch (error) {
+    console.error("Error loading Pokemon:", error);
   } finally {
     hideLoadingSpinner();
   }
@@ -244,6 +246,8 @@ async function openPokemonModal(pokemonId) {
     await ensurePokemonDetails(pokemon);
     await preloadImage(pokemon.sprites.other.home.front_default);
     renderPokemonModal(pokemon, dialog);
+  } catch (error) {
+    console.error("Error loading Pokemon:", error);
   } finally {
     hideLoadingSpinner();
   }
@@ -398,6 +402,8 @@ async function executeSearch(query) {
     let allPokemon = await fetchAllPokemonNames();
     let matches = allPokemon.filter((poke) => poke.name.includes(query));
     await renderSearchResults(matches);
+  } catch (error) {
+    console.error("Search failed", error);
   } finally {
     hideLoadingSpinner();
   }
