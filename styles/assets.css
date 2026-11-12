@@ -601,8 +601,8 @@ tr:last-child th {
 }
 
 @media (max-width: 676px) {
-    .pokemon-dialog {
-        width: 90vw;
+    .dialog-content {
+        width: 80vw;
 
         padding: 16px;
     }

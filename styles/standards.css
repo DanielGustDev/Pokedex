@@ -98,3 +98,9 @@ table {
     border-spacing: 0;
     overflow: hidden;
 }
+
+@media (max-width: 410px) {
+    audio {
+        width: 230px;
+    }
+}
