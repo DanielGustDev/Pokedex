@@ -2,19 +2,7 @@
 
 //  POKEMON CARD TEMPLATES & DATA HELPERS
 
-function getPokemonData(poke) {
-  return {
-    id: poke.id,
-    name: poke.name,
-    image: poke.sprites.front_default,
-    primaryType: poke.types[0].type.name,
-    typeIconsHTML: renderTypeIcons(poke.typeIcons),
-  };
-}
-
-function createPokemonCardHTML(poke) {
-  let cardData = getPokemonData(poke);
-
+function createPokemonCardHTML(cardData) {
   return `
   <button class="pokemon-card type-${cardData.primaryType}" data-id="card" aria-label="Open ${cardData.name}, Pokémon number ${cardData.id}" onclick="openPokemonModal(${cardData.id})"'>
                 <div class="title">

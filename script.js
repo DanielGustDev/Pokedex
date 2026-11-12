@@ -31,9 +31,21 @@ async function renderPokemonList(pokemonList) {
   displayPokemonCards(pokemonData, true);
 }
 
+function getPokemonData(poke) {
+  return {
+    id: poke.id,
+    name: poke.name,
+    image: poke.sprites.front_default,
+    primaryType: poke.types[0].type.name,
+    typeIconsHTML: renderTypeIcons(poke.typeIcons),
+  };
+}
+
 function displayPokemonCards(pokemonData, append = false) {
   const cardGrid = document.querySelector(".card-grid");
-  const html = pokemonData.map(createPokemonCardHTML).join("");
+  const html = pokemonData
+    .map((poke) => createPokemonCardHTML(getPokemonData(poke)))
+    .join("");
 
   if (append) {
     cardGrid.insertAdjacentHTML("beforeend", html);
