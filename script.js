@@ -255,9 +255,10 @@ async function openPokemonModal(pokemonId) {
 
 function renderPokemonModal(pokemon, dialog) {
   const modalBody = document.getElementById("pokemon_dialog");
-  const newHTML = createPokemonDialogHTML(pokemon);
+  modalBody.innerHTML = createPokemonDialogHTML(pokemon);
 
-  modalBody.innerHTML = newHTML;
+  const leftButton = modalBody.querySelector(".left-button");
+  if (leftButton) leftButton.disabled = pokemon.id <= 1;
 
   if (!dialog.open) dialog.showModal();
 }
@@ -329,6 +330,9 @@ async function navigatePokemon(currentId, direction) {
 }
 
 function getTargetPokemonId(currentId, direction) {
+  if (currentId === 1 && direction === -1) {
+    return cachedAllPokemon ? cachedAllPokemon.length : totalPokemonCount;
+  }
   return Math.max(1, currentId + direction);
 }
 

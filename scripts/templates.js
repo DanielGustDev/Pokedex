@@ -35,7 +35,7 @@ function createPokemonDialogHTML(poke) {
         <section class="dialog-content" data-id="overly-pokemon-name" onclick="event.stopPropagation()">
                 <div class="dialog-top">
                     <div class="dialog-title">
-                        <button class="left_button" id="prevButton" data-id="prev-button" aria-label="Previous Pokémon"
+                        <button class="left-button" id="prevButton" data-id="prev-button" aria-label="Previous Pokémon"
                             onclick="navigatePokemon(${poke.id}, -1)">
                             <svg aria-hidden"true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
                                 <g id="arrow-left" fill="#000000">
@@ -50,7 +50,7 @@ function createPokemonDialogHTML(poke) {
                             <p>#${poke.id}</p>
                             <h3>${poke.name}</h3>
                         </div>
-                        <button class="right_button" id="nextButton" data-id="next-button" aria-label="Next Pokémon"
+                        <button class="right-button" id="nextButton" data-id="next-button" aria-label="Next Pokémon"
                             onclick="navigatePokemon(${poke.id}, 1)">
                             <svg aria-hidden"true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
                                 <g id="arrow-right" fill="#000000">

@@ -220,8 +220,8 @@
     width: clamp(250px, 70vw, 560px);
 }
 
-.left_button,
-.right_button,
+.left-button,
+.right-button,
 .scroll-top-button {
     display: flex;
     justify-content: center;
@@ -234,13 +234,18 @@
     padding: 0;
 }
 
-.left_button svg,
-.right_button svg,
+.left-button svg,
+.right-button svg,
 .scroll-top-button {
     display: block;
 
     width: 24px;
     height: 24px;
+}
+
+.left-button:disabled {
+    opacity: 0;
+    pointer-events: none;
 }
 
 .id-and-name {
