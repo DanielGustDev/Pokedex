@@ -376,7 +376,13 @@ footer {
     }
 
     .header-bottom:focus-within {
-        width: 300px;
+        width: 250px;
+    }
+
+    .header-bottom:focus-within .search-button {
+        width: 136px;
+
+        font-size: 0.7rem;
     }
 }
 

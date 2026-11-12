@@ -1,7 +1,5 @@
 // @ts-nocheck
 
-// GLOBAL VARIABLES & CONSTANTS
-
 const BASE_URL = "https://pokeapi.co/api/v2/pokemon/";
 let currentOffset = 0;
 let currentLimit = 30;
@@ -240,7 +238,7 @@ async function openPokemonModal(pokemonId) {
 }
 
 function renderPokemonModal(pokemon, dialog) {
-  const modalBody = document.getElementById("modal_body");
+  const modalBody = document.getElementById("pokemon_dialog");
   const newHTML = createPokemonDialogHTML(pokemon);
 
   modalBody.innerHTML = newHTML;

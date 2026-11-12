@@ -1,10 +1,15 @@
 /* POKEMON CARD*/
 
 .pokemon-card {
-    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 
     height: 420px;
     width: clamp(260px, 90vw, 300px);
+
+    padding: 0;
 
     border: var(--border);
     border-radius: 6px;
@@ -114,7 +119,7 @@
 }
 
 .pokemon-card img {
-    width: clamp(180px, 75vw, 240px);
+    width: clamp(180px, 70vw, 240px);
     height: auto;
     aspect-ratio: 1;
 
@@ -160,12 +165,24 @@
 /*  MODAL / DIALOG */
 
 .pokemon-dialog {
-    max-width: 1440px;
+    padding: 0;
+    margin: auto;
+
+    background: transparent;
+
+    border: none;
+}
+
+.pokemon-dialog::backdrop {
+    background-color: transparent;
+    backdrop-filter: blur(6px);
+}
+
+.dialog-content {
     width: clamp(300px, 96vw, 1000px);
     height: fit-content;
 
     padding: 24px;
-    margin: auto;
 
     background-color: var(--background-primary);
 
@@ -177,15 +194,6 @@
 
 
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-}
-
-.pokemon-dialog::backdrop {
-    background-color: transparent;
-    backdrop-filter: blur(6px);
-}
-
-.modal-body {
-    display: flex;
 }
 
 .dialog-top {

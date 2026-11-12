@@ -44,7 +44,7 @@ function renderTypeIcons(typeIcons) {
 
 function createPokemonDialogHTML(poke) {
   return `
-        <section data-id="overly-pokemon-name">
+        <section class="dialog-content" data-id="overly-pokemon-name" onclick="event.stopPropagation()">
                 <div class="dialog-top">
                     <div class="dialog-title">
                         <button class="left_button" id="prevButton" data-id="prev-button" aria-label="Previous Pokémon"
