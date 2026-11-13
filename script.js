@@ -5,6 +5,8 @@ let currentOffset = 0;
 let currentLimit = 30;
 let loadedPokemon = [];
 let cachedAllPokemon = null;
+let cachedTypes = [];
+const typePromises = {};
 let isSearchActive = false;
 
 //  INITIAL LOADING & LIST RENDERING
@@ -169,7 +171,7 @@ async function parseEvolutionStep(step, evolutionList) {
 
 async function addEvolutionPokemon(step, evolutionList) {
   const id = step.species.url.split("/").filter(Boolean).pop();
-  let details = await fetchJson(`${BASE_URL}${id}`);
+  let details = await getPokemon(id);
   evolutionList.push({
     name: details.name,
     image: details.sprites.front_default,
@@ -179,20 +181,29 @@ async function addEvolutionPokemon(step, evolutionList) {
 //  TYPE ICONS & FORMATTING HELPERS
 
 async function loadIcons(typesArray) {
-  let typePromises = typesArray.map((typeInfo) =>
+  let localPromises = typesArray.map((typeInfo) =>
     fetchSingleType(typeInfo.type.url),
   );
 
-  return await Promise.all(typePromises);
+  return await Promise.all(localPromises);
 }
 
 async function fetchSingleType(typeUrl) {
-  let typeData = await fetchJson(typeUrl);
+  let cachedType = cachedTypes.find((type) => type.url === typeUrl);
+  if (cachedType) return cachedType;
+  if (!typePromises[typeUrl]) {
+    typePromises[typeUrl] = fetchJson(typeUrl).then((typeData) => {
+      let typeObject = {
+        url: typeUrl,
+        name: typeData.name,
+        icon: extractIconUrl(typeData),
+      };
+      cachedTypes.push(typeObject);
+      return typeObject;
+    });
+  }
 
-  return {
-    name: typeData.name,
-    icon: extractIconUrl(typeData),
-  };
+  return await typePromises[typeUrl];
 }
 
 function extractIconUrl(typeData) {
@@ -481,9 +492,21 @@ function showSearchError() {
   cardGrid.innerHTML = `<p class="no-results">Please enter at least 3 characters.</p>`;
 }
 
-//  EVENT LISTENER
+//  EVENT LISTENER & INITIALIZATION
 
-document.addEventListener("DOMContentLoaded", () => {
+init();
+
+function init() {
+  initEventListeners();
+  loadData();
+}
+
+function initEventListeners() {
+  initSearchListeners();
+  initGlobalUIListeners();
+}
+
+function initSearchListeners() {
   let searchButton = document.querySelector(".search-button");
   let searchInput = document.querySelector(".pokedex-search");
 
@@ -496,8 +519,10 @@ document.addEventListener("DOMContentLoaded", () => {
       if (event.key === "Enter") handleSearch();
     });
   }
-});
+}
 
-window.addEventListener("scroll", updateScrollVisibility);
-document.addEventListener("focusin", updateScrollVisibility);
-document.addEventListener("focusout", updateScrollVisibility);
+function initGlobalUIListeners() {
+  window.addEventListener("scroll", updateScrollVisibility);
+  document.addEventListener("focusin", updateScrollVisibility);
+  document.addEventListener("focusout", updateScrollVisibility);
+}

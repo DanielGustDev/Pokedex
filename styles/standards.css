@@ -99,7 +99,7 @@ table {
     overflow: hidden;
 }
 
-@media (max-width: 410px) {
+@media (max-width: 676px) {
     audio {
         width: 230px;
     }
