@@ -266,7 +266,9 @@ async function openPokemonModal(pokemonId) {
 
 function renderPokemonModal(pokemon, dialog) {
   const modalBody = document.getElementById("pokemon_dialog");
-  modalBody.innerHTML = createPokemonDialogHTML(pokemon);
+
+  const preparedData = preparePokemonDialogData(pokemon);
+  modalBody.innerHTML = createPokemonDialogHTML(preparedData);
 
   const leftButton = modalBody.querySelector(".left-button");
   if (leftButton) leftButton.disabled = pokemon.id <= 1;
@@ -297,40 +299,42 @@ async function renderDetailTab(pokemonId, clickedButton, template) {
   document.getElementById("dialog_detail_container").innerHTML = html;
 }
 
-function setActiveTab(clickedButton) {
-  const tabButtons = document.querySelectorAll(".dialog-navbar button");
-
-  tabButtons.forEach((button) => {
-    button.classList.remove("active");
-    button.setAttribute("aria-selected", "false");
+function showDetails(pokemonId, buttonElement) {
+  setActiveTab(buttonElement);
+  let poke = loadedPokemon.find((p) => p.id === pokemonId);
+  let container = document.getElementById("dialog_detail_container");
+  container.innerHTML = getDetailsHTML({
+    typeNames: renderTypeNames(poke.typeIcons),
+    height: convertToMeters(poke.height),
+    weight: convertToKg(poke.weight),
   });
-
-  if (clickedButton) {
-    clickedButton.classList.add("active");
-    clickedButton.setAttribute("aria-selected", "true");
-  }
 }
 
-async function showDetails(pokemonId, clickedButton) {
-  await renderDetailTab(pokemonId, clickedButton, getDetailsHTML);
+function showStats(pokemonId, buttonElement) {
+  setActiveTab(buttonElement);
+  let poke = loadedPokemon.find((p) => p.id === pokemonId);
+  let container = document.getElementById("dialog_detail_container");
+  container.innerHTML = buildStatsHTML(poke);
 }
 
-async function showStats(pokemonId, clickedButton) {
-  await renderDetailTab(pokemonId, clickedButton, getStatsHTML);
+function showCall(pokemonId, buttonElement) {
+  setActiveTab(buttonElement);
+  let poke = loadedPokemon.find((p) => p.id === pokemonId);
+  let container = document.getElementById("dialog_detail_container");
+  container.innerHTML = buildCallHTML(poke);
 }
 
-async function showCall(pokemonId, clickedButton) {
-  await renderDetailTab(pokemonId, clickedButton, getCallHTML);
+function showForms(pokemonId, buttonElement) {
+  setActiveTab(buttonElement);
+  let poke = loadedPokemon.find((p) => p.id === pokemonId);
+  let container = document.getElementById("dialog_detail_container");
+  container.innerHTML = buildFormsHTML(poke);
 }
 
-async function showForms(pokemonId, clickedButton) {
-  const pokemon = await getPokemon(pokemonId);
-  await ensurePokemonDetails(pokemon);
-
-  setActiveTab(clickedButton);
-
-  document.getElementById("dialog_detail_container").innerHTML =
-    getFormsHTML(pokemon);
+function setActiveTab(buttonElement) {
+  let navButtons = document.querySelectorAll(".dialog-navbar button");
+  navButtons.forEach((btn) => btn.classList.remove("active"));
+  buttonElement.classList.add("active");
 }
 
 //  NAVIGATION, CACHING & SEARCH HELPERS
@@ -490,6 +494,74 @@ function showSearchError() {
   const cardGrid = document.querySelector(".card-grid");
 
   cardGrid.innerHTML = `<p class="no-results">Please enter at least 3 characters.</p>`;
+}
+
+// LOGIC & BUILDER FOR TEMPLATES
+
+function renderTypeIcons(typeIcons) {
+  if (!typeIcons) return "";
+  return typeIcons.map((type) => createTypeIconHTML(type)).join("");
+}
+
+function renderTypeNames(typesIcons) {
+  if (!typesIcons) return "";
+  return typesIcons
+    .map((type) => type.name.charAt(0).toUpperCase() + type.name.slice(1))
+    .join(", ");
+}
+
+function renderEvolutionChain(evolutionChain) {
+  if (!evolutionChain || evolutionChain.length <= 1) return "";
+  let buttonsHTML = evolutionChain
+    .map((evo) => renderEvoButtonHTML(evo))
+    .join("");
+  return renderEvolutionChainHTML(buttonsHTML);
+}
+
+function preparePokemonDialogData(poke) {
+  return {
+    ...poke,
+    primaryType: poke.types[0].type.name,
+    image: poke.sprites.other.home.front_default,
+    evolutionHTML: renderEvolutionChain(poke.evolutionChain),
+    detailsHTML: getDetailsHTML({
+      typeNames: renderTypeNames(poke.typeIcons),
+      height: convertToMeters(poke.height),
+      weight: convertToKg(poke.weight),
+    }),
+  };
+}
+
+function buildStatsHTML(poke) {
+  let statsRows = poke.stats
+    .map(
+      (statObj) => `
+        <tr>
+            <th>${statObj.stat.name.toUpperCase()}:</th>
+            <td>${statObj.base_stat}</td>
+        </tr>
+    `,
+    )
+    .join("");
+  return getStatsHTML(statsRows);
+}
+
+function buildCallHTML(poke) {
+  let cryUrl = poke.cries?.latest || "";
+  let audioHTML = cryUrl
+    ? `<audio controls src="${cryUrl}"></audio>`
+    : "<p>No Call known</p>";
+  return getCallHTML(audioHTML);
+}
+
+function buildFormsHTML(poke) {
+  if (!poke.formsList || poke.formsList.length <= 1) {
+    return `<div class="dialog-details no-forms"><p>No alternative forms known.</p></div>`;
+  }
+  let buttonsHTML = poke.formsList
+    .map((form) => renderEvoButtonHTML(form))
+    .join("");
+  return getFormsHTML(buttonsHTML);
 }
 
 //  EVENT LISTENER & INITIALIZATION
