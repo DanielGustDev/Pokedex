@@ -4,24 +4,38 @@ const BASE_URL = "https://pokeapi.co/api/v2/pokemon/";
 let currentOffset = 0;
 let currentLimit = 30;
 let loadedPokemon = [];
-let cachedAllPokemon = null;
-let cachedTypes = [];
-const typePromises = {};
+const globalCache = {};
 let isSearchActive = false;
+let currentSearchResults = [];
 
-//  INITIAL LOADING & LIST RENDERING
+// --- UNIVERSAL FETCH & CACHE ---
+
+async function fetchJson(url) {
+  if (globalCache[url]) return await globalCache[url];
+  globalCache[url] = fetchJsonRaw(url);
+  return await globalCache[url];
+}
+
+async function fetchJsonRaw(url) {
+  try {
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`API Error: ${res.status}`);
+    return await res.json();
+  } catch (error) {
+    console.error("Fetch failed:", url, error);
+    throw error;
+  }
+}
+
+// --- INITIAL LOADING & LIST RENDERING ---
 
 async function loadData() {
   showLoadingSpinner();
   try {
     const url = `${BASE_URL}?limit=${currentLimit}&offset=${currentOffset}`;
     const data = await fetchJson(url);
-
     await renderPokemonList(data.results);
-
     currentOffset += data.results.length;
-  } catch (error) {
-    console.error("Error loading Pokemon:", error);
   } finally {
     hideLoadingSpinner();
   }
@@ -31,7 +45,6 @@ async function renderPokemonList(pokemonList) {
   const pokemonData = await Promise.all(
     pokemonList.map((pokemon) => getPokemon(pokemon.name)),
   );
-
   displayPokemonCards(pokemonData, true);
 }
 
@@ -55,22 +68,16 @@ function displayPokemonCards(pokemonData, append = false) {
     cardGrid.insertAdjacentHTML("beforeend", html);
     return;
   }
-
   cardGrid.innerHTML = html;
 }
 
 async function loadMorePokemon() {
   const loadButton = document.getElementById("load_more_button");
-  if (loadButton) {
-    setLoadButtonState(loadButton, true);
-  }
-
+  if (loadButton) setLoadButtonState(loadButton, true);
   try {
     await loadData();
   } finally {
-    if (loadButton) {
-      setLoadButtonState(loadButton, false);
-    }
+    if (loadButton) setLoadButtonState(loadButton, false);
   }
 }
 
@@ -83,55 +90,35 @@ function changeLimit(newLimit) {
   currentLimit = Number(newLimit);
 }
 
-//  API FETCHING & LAZY LOADING (DETAILS)
-
-async function fetchJson(url) {
-  try {
-    const response = await fetch(url);
-    if (!response.ok) throw new Error(`API Error: ${response.status}`);
-    return await response.json();
-  } catch (error) {
-    console.error("Fetch failed:", url, error);
-    throw error;
-  }
-}
+// --- API FETCHING & LAZY LOADING (DETAILS) ---
 
 async function fetchPokemon(url) {
   const pokemon = await fetchJson(url);
-
   pokemon.typeIcons = await loadIcons(pokemon.types);
-
   return pokemon;
 }
 
 async function getPokemon(identifier) {
   const pokemon = loadedPokemon.find(
-    (poke) =>
-      poke.id === Number(identifier) ||
-      poke.name === String(identifier).toLowerCase(),
+    (p) =>
+      p.id === Number(identifier) ||
+      p.name === String(identifier).toLowerCase(),
   );
-
   if (pokemon) return pokemon;
-
   const newPokemon = await fetchPokemon(`${BASE_URL}${identifier}`);
-
   loadedPokemon.push(newPokemon);
-  loadedPokemon.sort((pokemonA, pokemonB) => pokemonA.id - pokemonB.id);
-
+  loadedPokemon.sort((a, b) => a.id - b.id);
   return newPokemon;
 }
 
 async function ensurePokemonDetails(pokemon) {
   if (pokemon.detailLoaded) return;
-
   const speciesData = await fetchJson(pokemon.species.url);
-
   pokemon.flavorText = extractFlavorText(speciesData);
   pokemon.evolutionChain = await fetchEvolutionChain(
     speciesData.evolution_chain.url,
   );
   pokemon.formsList = await fetchPokemonForms(speciesData.varieties);
-
   pokemon.detailLoaded = true;
 }
 
@@ -140,21 +127,19 @@ async function fetchPokemonForms(varieties) {
   return Promise.all(varieties.map(fetchPokemonForm));
 }
 
-async function fetchPokemonForm(varietiy) {
-  const pokemon = await getPokemon(varietiy.pokemon.name);
-
+async function fetchPokemonForm(variety) {
+  const pokemon = await getPokemon(variety.pokemon.name);
   return {
-    name: varietiy.pokemon.name,
+    name: variety.pokemon.name,
     image: pokemon.sprites.front_default,
   };
 }
 
-//  EVOLUTION CHAIN PARSING
+// --- EVOLUTION CHAIN PARSING ---
 
 async function fetchEvolutionChain(evolutionChainUrl) {
   let chainData = await fetchJson(evolutionChainUrl);
   let evolutionList = [];
-
   await parseEvolutionStep(chainData.chain, evolutionList);
   return evolutionList;
 }
@@ -162,7 +147,6 @@ async function fetchEvolutionChain(evolutionChainUrl) {
 async function parseEvolutionStep(step, evolutionList) {
   if (!step) return;
   await addEvolutionPokemon(step, evolutionList);
-
   let nextSteps = step.evolves_to || [];
   for (let nextStep of nextSteps) {
     await parseEvolutionStep(nextStep, evolutionList);
@@ -178,32 +162,19 @@ async function addEvolutionPokemon(step, evolutionList) {
   });
 }
 
-//  TYPE ICONS & FORMATTING HELPERS
+// --- TYPE ICONS & FORMATTING HELPERS ---
 
 async function loadIcons(typesArray) {
-  let localPromises = typesArray.map((typeInfo) =>
-    fetchSingleType(typeInfo.type.url),
-  );
-
-  return await Promise.all(localPromises);
+  return Promise.all(typesArray.map((t) => fetchSingleType(t.type.url)));
 }
 
 async function fetchSingleType(typeUrl) {
-  let cachedType = cachedTypes.find((type) => type.url === typeUrl);
-  if (cachedType) return cachedType;
-  if (!typePromises[typeUrl]) {
-    typePromises[typeUrl] = fetchJson(typeUrl).then((typeData) => {
-      let typeObject = {
-        url: typeUrl,
-        name: typeData.name,
-        icon: extractIconUrl(typeData),
-      };
-      cachedTypes.push(typeObject);
-      return typeObject;
-    });
-  }
-
-  return await typePromises[typeUrl];
+  let typeData = await fetchJson(typeUrl);
+  return {
+    url: typeUrl,
+    name: typeData.name,
+    icon: extractIconUrl(typeData),
+  };
 }
 
 function extractIconUrl(typeData) {
@@ -215,7 +186,6 @@ function extractIconUrl(typeData) {
 
 function renderTypeNames(typesIcons) {
   if (!typesIcons) return "";
-
   return typesIcons
     .map((type) => type.name.charAt(0).toUpperCase() + type.name.slice(1))
     .join(", ");
@@ -225,7 +195,6 @@ function extractFlavorText(speciesData) {
   let englishEntry = speciesData.flavor_text_entries?.find(
     (entry) => entry.language.name === "en",
   );
-
   return (
     englishEntry?.flavor_text?.replace(/[\n\f]/g, " ") ??
     "No Pokédex entry found."
@@ -237,28 +206,23 @@ function formatDecimal(value) {
 }
 
 function convertToMeters(height) {
-  let meters = (height / 10).toFixed(1);
-  return formatDecimal(meters);
+  return formatDecimal((height / 10).toFixed(1));
 }
 
 function convertToKg(weight) {
-  let kg = (weight / 10).toFixed(1);
-  return formatDecimal(kg);
+  return formatDecimal((weight / 10).toFixed(1));
 }
 
-//  MODAL & UI INTERACTION
+// --- MODAL & UI INTERACTION ---
 
 async function openPokemonModal(pokemonId) {
   const dialog = document.getElementById("pokemon_dialog");
   showLoadingSpinner();
-
   try {
     const pokemon = await getPokemon(pokemonId);
     await ensurePokemonDetails(pokemon);
     await preloadImage(pokemon.sprites.other.home.front_default);
     renderPokemonModal(pokemon, dialog);
-  } catch (error) {
-    console.error("Error loading Pokemon:", error);
   } finally {
     hideLoadingSpinner();
   }
@@ -266,14 +230,31 @@ async function openPokemonModal(pokemonId) {
 
 function renderPokemonModal(pokemon, dialog) {
   const modalBody = document.getElementById("pokemon_dialog");
-
   const preparedData = preparePokemonDialogData(pokemon);
   modalBody.innerHTML = createPokemonDialogHTML(preparedData);
-
-  const leftButton = modalBody.querySelector(".left-button");
-  if (leftButton) leftButton.disabled = pokemon.id <= 1;
-
+  updateModalNavigationButtons(pokemon, modalBody);
   if (!dialog.open) dialog.showModal();
+}
+
+function updateModalNavigationButtons(pokemon, modalBody) {
+  const leftBtn = modalBody.querySelector(".left-button");
+  const rightBtn = modalBody.querySelector(".right-button");
+  if (isSearchActive && currentSearchResults.length > 0) {
+    updateSearchNavButtons(pokemon, leftBtn, rightBtn);
+  } else {
+    updateStandardNavButtons(pokemon, leftBtn, rightBtn);
+  }
+}
+
+function updateSearchNavButtons(pokemon, leftBtn, rightBtn) {
+  let idx = findSearchIndex(pokemon.id);
+  if (leftBtn) leftBtn.disabled = idx <= 0;
+  if (rightBtn) rightBtn.disabled = idx >= currentSearchResults.length - 1;
+}
+
+function updateStandardNavButtons(pokemon, leftBtn, rightBtn) {
+  if (leftBtn) leftBtn.disabled = pokemon.id <= 1;
+  if (rightBtn) rightBtn.disabled = false;
 }
 
 async function preloadImage(url) {
@@ -287,66 +268,88 @@ async function preloadImage(url) {
 }
 
 function closeModal() {
-  let dialog = document.getElementById("pokemon_dialog");
-  dialog.close();
-}
-
-async function renderDetailTab(pokemonId, clickedButton, template) {
-  const pokemon = await getPokemon(pokemonId);
-  setActiveTab(clickedButton);
-
-  const html = template(pokemon);
-  document.getElementById("dialog_detail_container").innerHTML = html;
+  document.getElementById("pokemon_dialog").close();
 }
 
 function showDetails(pokemonId, buttonElement) {
   setActiveTab(buttonElement);
   let poke = loadedPokemon.find((p) => p.id === pokemonId);
-  let container = document.getElementById("dialog_detail_container");
-  container.innerHTML = getDetailsHTML({
-    typeNames: renderTypeNames(poke.typeIcons),
-    height: convertToMeters(poke.height),
-    weight: convertToKg(poke.weight),
-  });
+  document.getElementById("dialog_detail_container").innerHTML = getDetailsHTML(
+    {
+      typeNames: renderTypeNames(poke.typeIcons),
+      height: convertToMeters(poke.height),
+      weight: convertToKg(poke.weight),
+    },
+  );
 }
 
 function showStats(pokemonId, buttonElement) {
   setActiveTab(buttonElement);
   let poke = loadedPokemon.find((p) => p.id === pokemonId);
-  let container = document.getElementById("dialog_detail_container");
-  container.innerHTML = buildStatsHTML(poke);
+  document.getElementById("dialog_detail_container").innerHTML =
+    buildStatsHTML(poke);
 }
 
 function showCall(pokemonId, buttonElement) {
   setActiveTab(buttonElement);
   let poke = loadedPokemon.find((p) => p.id === pokemonId);
-  let container = document.getElementById("dialog_detail_container");
-  container.innerHTML = buildCallHTML(poke);
+  document.getElementById("dialog_detail_container").innerHTML =
+    buildCallHTML(poke);
 }
 
 function showForms(pokemonId, buttonElement) {
   setActiveTab(buttonElement);
   let poke = loadedPokemon.find((p) => p.id === pokemonId);
-  let container = document.getElementById("dialog_detail_container");
-  container.innerHTML = buildFormsHTML(poke);
+  document.getElementById("dialog_detail_container").innerHTML =
+    buildFormsHTML(poke);
 }
 
 function setActiveTab(buttonElement) {
-  let navButtons = document.querySelectorAll(".dialog-navbar button");
-  navButtons.forEach((btn) => btn.classList.remove("active"));
+  document
+    .querySelectorAll(".dialog-navbar button")
+    .forEach((b) => b.classList.remove("active"));
   buttonElement.classList.add("active");
 }
 
-//  NAVIGATION, CACHING & SEARCH HELPERS
+// --- NAVIGATION & SEARCH HELPERS ---
 
 async function navigatePokemon(currentId, direction) {
-  let targetId = getTargetPokemonId(currentId, direction);
-  await openPokemonModal(targetId);
+  if (isSearchActive && currentSearchResults.length > 0) {
+    await navigateSearchPokemon(currentId, direction);
+  } else {
+    await navigateStandardPokemon(currentId, direction);
+  }
+}
+
+async function navigateSearchPokemon(currentId, direction) {
+  let idx = findSearchIndex(currentId);
+  if (idx === -1) return;
+  let newIdx = idx + direction;
+  if (newIdx >= 0 && newIdx < currentSearchResults.length) {
+    await openPokemonModal(getSearchTargetId(newIdx));
+  }
+}
+
+async function navigateStandardPokemon(currentId, direction) {
+  await openPokemonModal(getTargetPokemonId(currentId, direction));
+}
+
+function findSearchIndex(currentId) {
+  return currentSearchResults.findIndex((poke) => {
+    let id = Number(poke.url.split("/").filter(Boolean).pop());
+    return id === currentId;
+  });
+}
+
+function getSearchTargetId(index) {
+  return Number(
+    currentSearchResults[index].url.split("/").filter(Boolean).pop(),
+  );
 }
 
 function getTargetPokemonId(currentId, direction) {
   if (currentId === 1 && direction === -1) {
-    return cachedAllPokemon ? cachedAllPokemon.length : totalPokemonCount;
+    return globalCache[BASE_URL + "?limit=1"]?.count || 1025;
   }
   return Math.max(1, currentId + direction);
 }
@@ -357,17 +360,13 @@ async function openPokemonEvolution(pokemonName) {
 }
 
 async function handleFooterButtonClick() {
-  if (isSearchActive) {
-    await resetToMainView();
-  } else {
-    await loadMorePokemon();
-  }
+  if (isSearchActive) await resetToMainView();
+  else await loadMorePokemon();
 }
 
 async function resetToMainView() {
   setSearchActiveState(false, "Load More");
   document.querySelector(".pokedex-search").value = "";
-
   currentOffset = 0;
   clearPokemonList();
   await loadData();
@@ -380,36 +379,28 @@ function scrollToTop() {
 function updateScrollVisibility() {
   const button = document.getElementById("scroll_to_top");
   if (!button) return;
-
   const dialogOpen = document.getElementById("pokemon_dialog")?.open;
-
   button.classList.toggle(
     "show",
     window.scrollY > 300 && !dialogOpen && !isSearchActive,
   );
 }
 
-//  LOADING SPINNER CONTROLS
+// --- LOADING SPINNER CONTROLS ---
 
 function showLoadingSpinner() {
-  let overlay = document.getElementById("loading_popover");
-  if (overlay) {
-    try {
-      overlay.showPopover();
-    } catch (error) {}
-  }
+  try {
+    document.getElementById("loading_popover")?.showPopover();
+  } catch (error) {}
 }
 
 function hideLoadingSpinner() {
-  let overlay = document.getElementById("loading_popover");
-  if (overlay) {
-    try {
-      overlay.hidePopover();
-    } catch (error) {}
-  }
+  try {
+    document.getElementById("loading_popover")?.hidePopover();
+  } catch (error) {}
 }
 
-//  SEARCH FUNCTIONALITY
+// --- SEARCH FUNCTIONALITY ---
 
 async function handleSearch(event) {
   if (event) event.preventDefault();
@@ -422,34 +413,29 @@ async function executeSearch(query) {
   showLoadingSpinner();
   try {
     let allPokemon = await fetchAllPokemonNames();
-    let matches = allPokemon.filter((poke) => poke.name.includes(query));
-    await renderSearchResults(matches);
-  } catch (error) {
-    console.error("Search failed", error);
+    currentSearchResults = allPokemon.filter((poke) =>
+      poke.name.includes(query),
+    );
+    await renderSearchResults(currentSearchResults);
   } finally {
     hideLoadingSpinner();
   }
 }
 
 function getSearchQuery() {
-  let inputField = document.querySelector(".pokedex-search");
-  return inputField ? inputField.value.trim().toLowerCase() : "";
+  let input = document.querySelector(".pokedex-search");
+  return input ? input.value.trim().toLowerCase() : "";
 }
 
 async function fetchAllPokemonNames() {
-  if (cachedAllPokemon) return cachedAllPokemon;
-
   const { count } = await fetchJson(`${BASE_URL}?limit=1`);
   const { results } = await fetchJson(`${BASE_URL}?limit=${count}`);
-
-  cachedAllPokemon = results;
-  return cachedAllPokemon;
+  return results;
 }
 
 function setSearchActiveState(active, buttonText) {
   isSearchActive = active;
   document.getElementById("load_more_button").innerText = buttonText;
-
   let limitSelector = document.getElementById("limit_selector");
   if (limitSelector)
     limitSelector.style.display = active ? "none" : "inline-block";
@@ -457,20 +443,13 @@ function setSearchActiveState(active, buttonText) {
 
 async function renderSearchResults(matches) {
   prepareSearchView();
-
-  if (matches.length === 0) {
-    renderNoSearchResults();
-    return;
-  }
-
-  const pokemonData = await fetchSearchPokemon(matches);
-  displaySearchPokemon(pokemonData);
+  if (matches.length === 0) return renderNoSearchResults();
+  displaySearchPokemon(await fetchSearchPokemon(matches));
 }
 
 function renderNoSearchResults() {
-  const cardGrid = document.querySelector(".card-grid");
-
-  cardGrid.innerHTML = `<p class="no-results" data-id="not-found">No Pokémon found.</p>`;
+  document.querySelector(".card-grid").innerHTML =
+    `<p class="no-results" data-id="not-found">No Pokémon found.</p>`;
 }
 
 function prepareSearchView() {
@@ -491,23 +470,15 @@ function displaySearchPokemon(pokemonData) {
 }
 
 function showSearchError() {
-  const cardGrid = document.querySelector(".card-grid");
-
-  cardGrid.innerHTML = `<p class="no-results">Please enter at least 3 characters.</p>`;
+  document.querySelector(".card-grid").innerHTML =
+    `<p class="no-results">Please enter at least 3 characters.</p>`;
 }
 
-// LOGIC & BUILDER FOR TEMPLATES
+// --- LOGIC & BUILDER FOR TEMPLATES ---
 
 function renderTypeIcons(typeIcons) {
   if (!typeIcons) return "";
   return typeIcons.map((type) => createTypeIconHTML(type)).join("");
-}
-
-function renderTypeNames(typesIcons) {
-  if (!typesIcons) return "";
-  return typesIcons
-    .map((type) => type.name.charAt(0).toUpperCase() + type.name.slice(1))
-    .join(", ");
 }
 
 function renderEvolutionChain(evolutionChain) {
@@ -535,12 +506,8 @@ function preparePokemonDialogData(poke) {
 function buildStatsHTML(poke) {
   let statsRows = poke.stats
     .map(
-      (statObj) => `
-        <tr>
-            <th>${statObj.stat.name.toUpperCase()}:</th>
-            <td>${statObj.base_stat}</td>
-        </tr>
-    `,
+      (s) =>
+        `<tr><th>${s.stat.name.toUpperCase()}:</th><td>${s.base_stat}</td></tr>`,
     )
     .join("");
   return getStatsHTML(statsRows);
@@ -564,7 +531,7 @@ function buildFormsHTML(poke) {
   return getFormsHTML(buttonsHTML);
 }
 
-//  EVENT LISTENER & INITIALIZATION
+// --- EVENT LISTENER & INITIALIZATION ---
 
 init();
 
@@ -581,16 +548,12 @@ function initEventListeners() {
 function initSearchListeners() {
   let searchButton = document.querySelector(".search-button");
   let searchInput = document.querySelector(".pokedex-search");
-
-  if (searchButton) {
-    searchButton.addEventListener("click", handleSearch);
-  }
-
-  if (searchInput) {
-    searchInput.addEventListener("keydown", (event) => {
-      if (event.key === "Enter") handleSearch();
-    });
-  }
+  if (searchButton) searchButton.addEventListener("click", handleSearch);
+  if (searchInput)
+    searchInput.addEventListener(
+      "keydown",
+      (e) => e.key === "Enter" && handleSearch(),
+    );
 }
 
 function initGlobalUIListeners() {
