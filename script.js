@@ -18,9 +18,9 @@ async function fetchJson(url) {
 
 async function fetchJsonRaw(url) {
   try {
-    const res = await fetch(url);
-    if (!res.ok) throw new Error(`API Error: ${res.status}`);
-    return await res.json();
+    const response = await fetch(url);
+    if (!response.ok) throw new Error(`API Error: ${response.status}`);
+    return await response.json();
   } catch (error) {
     console.error("Fetch failed:", url, error);
     throw error;
@@ -100,14 +100,14 @@ async function fetchPokemon(url) {
 
 async function getPokemon(identifier) {
   const pokemon = loadedPokemon.find(
-    (p) =>
-      p.id === Number(identifier) ||
-      p.name === String(identifier).toLowerCase(),
+    (existingPokemon) =>
+      existingPokemon.id === Number(identifier) ||
+      existingPokemon.name === String(identifier).toLowerCase(),
   );
   if (pokemon) return pokemon;
   const newPokemon = await fetchPokemon(`${BASE_URL}${identifier}`);
   loadedPokemon.push(newPokemon);
-  loadedPokemon.sort((a, b) => a.id - b.id);
+  loadedPokemon.sort((pokemonA, pokemonB) => pokemonA.id - pokemonB.id);
   return newPokemon;
 }
 
@@ -221,7 +221,10 @@ async function openPokemonModal(pokemonId) {
   try {
     const pokemon = await getPokemon(pokemonId);
     await ensurePokemonDetails(pokemon);
-    await preloadImage(pokemon.sprites.other.home.front_default);
+
+    const imageUrl = getPokemonImage(pokemon);
+    if (imageUrl) await preloadImage(imageUrl);
+
     renderPokemonModal(pokemon, dialog);
   } finally {
     hideLoadingSpinner();
@@ -237,24 +240,34 @@ function renderPokemonModal(pokemon, dialog) {
 }
 
 function updateModalNavigationButtons(pokemon, modalBody) {
-  const leftBtn = modalBody.querySelector(".left-button");
-  const rightBtn = modalBody.querySelector(".right-button");
+  const leftButton = modalBody.querySelector(".left-button");
+  const rightButton = modalBody.querySelector(".right-button");
   if (isSearchActive && currentSearchResults.length > 0) {
-    updateSearchNavButtons(pokemon, leftBtn, rightBtn);
+    updateSearchNavButtons(pokemon, leftButton, rightButton);
   } else {
-    updateStandardNavButtons(pokemon, leftBtn, rightBtn);
+    updateStandardNavButtons(pokemon, leftButton, rightButton);
   }
 }
 
-function updateSearchNavButtons(pokemon, leftBtn, rightBtn) {
-  let idx = findSearchIndex(pokemon.id);
-  if (leftBtn) leftBtn.disabled = idx <= 0;
-  if (rightBtn) rightBtn.disabled = idx >= currentSearchResults.length - 1;
+function updateSearchNavButtons(pokemon, leftButton, rightButton) {
+  let index = findSearchIndex(pokemon.id);
+
+  if (leftButton) leftButton.disabled = index <= 0;
+  if (rightButton)
+    rightButton.disabled = index >= currentSearchResults.length - 1;
 }
 
-function updateStandardNavButtons(pokemon, leftBtn, rightBtn) {
-  if (leftBtn) leftBtn.disabled = pokemon.id <= 1;
-  if (rightBtn) rightBtn.disabled = false;
+function updateStandardNavButtons(pokemon, leftButton, rightButton) {
+  if (leftButton) leftButton.disabled = pokemon.id <= 1;
+  if (rightButton) rightButton.disabled = false;
+}
+
+function getPokemonImage(poke) {
+  return (
+    poke.sprites?.other?.["home"]?.front_default ||
+    poke.sprites?.front_default ||
+    "path/to/placeholder.png"
+  );
 }
 
 async function preloadImage(url) {
@@ -273,7 +286,9 @@ function closeModal() {
 
 function showDetails(pokemonId, buttonElement) {
   setActiveTab(buttonElement);
-  let poke = loadedPokemon.find((p) => p.id === pokemonId);
+  let poke = loadedPokemon.find(
+    (existingPokemon) => existingPokemon.id === pokemonId,
+  );
   document.getElementById("dialog_detail_container").innerHTML = getDetailsHTML(
     {
       typeNames: renderTypeNames(poke.typeIcons),
@@ -285,21 +300,27 @@ function showDetails(pokemonId, buttonElement) {
 
 function showStats(pokemonId, buttonElement) {
   setActiveTab(buttonElement);
-  let poke = loadedPokemon.find((p) => p.id === pokemonId);
+  let poke = loadedPokemon.find(
+    (existingPokemon) => existingPokemon.id === pokemonId,
+  );
   document.getElementById("dialog_detail_container").innerHTML =
     buildStatsHTML(poke);
 }
 
 function showCall(pokemonId, buttonElement) {
   setActiveTab(buttonElement);
-  let poke = loadedPokemon.find((p) => p.id === pokemonId);
+  let poke = loadedPokemon.find(
+    (existingPokemon) => existingPokemon.id === pokemonId,
+  );
   document.getElementById("dialog_detail_container").innerHTML =
     buildCallHTML(poke);
 }
 
 function showForms(pokemonId, buttonElement) {
   setActiveTab(buttonElement);
-  let poke = loadedPokemon.find((p) => p.id === pokemonId);
+  let poke = loadedPokemon.find(
+    (existingPokemon) => existingPokemon.id === pokemonId,
+  );
   document.getElementById("dialog_detail_container").innerHTML =
     buildFormsHTML(poke);
 }
@@ -322,11 +343,12 @@ async function navigatePokemon(currentId, direction) {
 }
 
 async function navigateSearchPokemon(currentId, direction) {
-  let idx = findSearchIndex(currentId);
-  if (idx === -1) return;
-  let newIdx = idx + direction;
-  if (newIdx >= 0 && newIdx < currentSearchResults.length) {
-    await openPokemonModal(getSearchTargetId(newIdx));
+  let currentIndex = findSearchIndex(currentId);
+  if (currentIndex === -1) return;
+
+  let newIndex = currentIndex + direction;
+  if (newIndex >= 0 && newIndex < currentSearchResults.length) {
+    await openPokemonModal(getSearchTargetId(newIndex));
   }
 }
 
@@ -493,7 +515,7 @@ function preparePokemonDialogData(poke) {
   return {
     ...poke,
     primaryType: poke.types[0].type.name,
-    image: poke.sprites.other.home.front_default,
+    image: getPokemonImage(poke),
     evolutionHTML: renderEvolutionChain(poke.evolutionChain),
     detailsHTML: getDetailsHTML({
       typeNames: renderTypeNames(poke.typeIcons),
@@ -506,8 +528,8 @@ function preparePokemonDialogData(poke) {
 function buildStatsHTML(poke) {
   let statsRows = poke.stats
     .map(
-      (s) =>
-        `<tr><th>${s.stat.name.toUpperCase()}:</th><td>${s.base_stat}</td></tr>`,
+      (stat) =>
+        `<tr><th>${stat.stat.name.toUpperCase()}:</th><td>${stat.base_stat}</td></tr>`,
     )
     .join("");
   return getStatsHTML(statsRows);

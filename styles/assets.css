@@ -243,7 +243,8 @@
     height: 24px;
 }
 
-.left-button:disabled {
+.left-button:disabled,
+.right-button:disabled {
     opacity: 0;
     pointer-events: none;
 }
