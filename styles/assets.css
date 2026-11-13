@@ -473,10 +473,17 @@ tr:last-child th {
 }
 
 .form-wrapper {
-    height: fit-content;
-    overflow: hidden;
+    height: auto;
+    max-height: none;
+
+    overflow: visible;
 
     border: none;
+}
+
+.dialog-details.form-wrapper {
+    max-height: none;
+    overflow: visible;
 }
 
 .no-forms {
