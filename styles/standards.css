@@ -24,6 +24,10 @@ body:has(dialog[open]) {
     overflow: hidden;
 }
 
+body:has(.loading-spinner-wrapper:popover-open) {
+    overflow: hidden;
+}
+
 h1 {
     font-family: 'Titan One';
     font-size: clamp(2.5rem, 5vw + 1rem, 4rem);
