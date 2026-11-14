@@ -243,7 +243,11 @@ function updateModalNavigationButtons(pokemon, modalBody) {
   const leftButton = modalBody.querySelector(".left-button");
   const rightButton = modalBody.querySelector(".right-button");
   if (isSearchActive && currentSearchResults.length > 0) {
-    updateSearchNavButtons(pokemon, leftButton, rightButton);
+    let index = findSearchIndex(pokemon.id);
+    index === -1
+      ? ((leftButton.style.display = "none"),
+        (rightButton.style.display = "none"))
+      : updateSearchNavButtons(pokemon, leftButton, rightButton);
   } else {
     updateStandardNavButtons(pokemon, leftButton, rightButton);
   }
