@@ -17,6 +17,7 @@ Quiz-App/
 │   ├── fonts/         # Custom typography webfonts
 │   └── icons/         # Custom SVG vector icons
 ├── scripts/
+│   ├── helpers.js     # Utility functions & formatting helpers
 │   └── templates.js   # Reusable HTML template literal functions
 ├── styles/
 │   ├── assets.css     # asset styling definitions
