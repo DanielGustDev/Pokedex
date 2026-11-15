@@ -20,11 +20,9 @@ body {
     background-color: black;
 }
 
-body:has(dialog[open]) {
-    overflow: hidden;
-}
-
-body:has(.loading-spinner-wrapper:popover-open) {
+body:has(dialog[open]),
+body:has(.loading-spinner-wrapper:popover-open),
+dialog:has(.loading-spinner-wrapper:popover-open) {
     overflow: hidden;
 }
 
