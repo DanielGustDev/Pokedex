@@ -175,3 +175,22 @@ function hideLoadingSpinner() {
     document.getElementById("loading_popover")?.hidePopover();
   } catch (error) {}
 }
+
+// --- EVENT LISTENER ---
+
+function initSearchListeners() {
+  let searchButton = document.querySelector(".search-button");
+  let searchInput = document.querySelector(".pokedex-search");
+  if (searchButton) searchButton.addEventListener("click", handleSearch);
+  if (searchInput)
+    searchInput.addEventListener(
+      "keydown",
+      (e) => e.key === "Enter" && handleSearch(),
+    );
+}
+
+function initGlobalUIListeners() {
+  window.addEventListener("scroll", updateScrollVisibility);
+  document.addEventListener("focusin", updateScrollVisibility);
+  document.addEventListener("focusout", updateScrollVisibility);
+}
