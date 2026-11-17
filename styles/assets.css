@@ -6,6 +6,8 @@
     justify-content: center;
     align-items: center;
 
+    position: relative;
+
     height: clamp(300px, 750vw, 420px);
     width: clamp(260px, 90vw, 300px);
 
@@ -13,6 +15,8 @@
 
     border: var(--border);
     border-radius: 6px;
+
+    box-shadow: none;
 
     cursor: pointer;
 
@@ -145,6 +149,8 @@
     inset: 0;
 
     background: linear-gradient(115deg, rgba(0, 0, 0, 0) 40%, rgba(255, 255, 255, 0.251) 50%, rgba(0, 0, 0, 0) 60%);
+
+    pointer-events: none;
 
     translate: -100% 0;
     transition: translate 0.8s ease;
@@ -528,6 +534,7 @@ tr:last-child th {
 
     border: none;
     background-color: transparent;
+    box-shadow: none;
 
     color: var(--font-primary);
     font-size: 12px;
@@ -538,6 +545,16 @@ tr:last-child th {
     width: 80px;
 }
 
+.evo-button:hover {
+    background-color: inherit;
+    filter: drop-shadow(0 0 6px var(--accent));
+}
+
+.evo-button:active {
+    transform: none;
+
+    box-shadow: none;
+}
 
 /* LOADING SPINNER */
 

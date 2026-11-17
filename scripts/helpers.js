@@ -148,6 +148,17 @@ async function resetToMainView() {
   await loadData();
 }
 
+function handleHomeClick() {
+  let homeBtn = document.querySelector(".home-button");
+  if (homeBtn) {
+    homeBtn.classList.add("is-spinning");
+    setTimeout(() => {
+      homeBtn.classList.remove("is-spinning");
+    }, 600);
+  }
+  resetToMainView();
+}
+
 function scrollToTop() {
   window.scrollTo({ top: 0, behavior: "smooth" });
 }

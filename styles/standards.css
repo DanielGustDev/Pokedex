@@ -59,15 +59,18 @@ p {
 }
 
 button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
     height: 24px;
 
     padding: 6px 12px;
 
     background-color: white;
 
-    filter:
-        drop-shadow(0 -2px 2px rgba(0, 0, 0, 0.7)) drop-shadow(0 2px 2px rgba(255, 255, 255, 0.4));
-
+    box-shadow: 0 6px 0 var(--button-accent);
+    border: 3px solid black;
     border-radius: 24px;
 
     color: black;
@@ -77,12 +80,18 @@ button {
     text-align: center;
 
     cursor: pointer;
+
+    transition: transform 0.05s ease, box-shadow 0.05s ease;
 }
 
 button:hover {
-    box-shadow:
-        inset 0 2px 4px rgba(0, 0, 0, 0.5),
-        0 0 8px var(--accent);
+    background-color: var(--button-background);
+}
+
+button:active {
+    transform: translateY(6px);
+
+    box-shadow: 0 0px 0 var(--button-accent);
 }
 
 audio {

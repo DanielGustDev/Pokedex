@@ -2,6 +2,8 @@
     --font-primary: rgb(255, 255, 255);
     --font-secondary: rgb(16, 11, 9);
     --accent: rgb(112, 243, 255);
+    --button-accent: rgb(148, 137, 137);
+    --button-background: rgb(240, 240, 240);
     --background-primary: rgb(17, 18, 30);
     --background-secondary: rgb(202, 5, 28);
     --background-tertiary: rgb(18, 22, 63);

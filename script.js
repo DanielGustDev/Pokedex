@@ -293,21 +293,32 @@ async function fetchAllPokemonNames() {
   return results;
 }
 
-function setSearchActiveState(active, buttonText) {
+function setSearchActiveState(active, buttonText, showButton = true) {
   isSearchActive = active;
-  document.getElementById("load_more_button").innerText = buttonText;
+  let loadButton = document.getElementById("load_more_button");
   let limitSelector = document.getElementById("limit_selector");
-  if (limitSelector)
+
+  if (loadButton) {
+    loadButton.innerText = buttonText;
+    loadButton.style.display = "inline-block";
+  }
+
+  if (limitSelector) {
     limitSelector.style.display = active ? "none" : "inline-block";
+  }
 }
 
 async function renderSearchResults(matches) {
-  prepareSearchView();
-  if (matches.length === 0) return renderNoSearchResults();
+  if (matches.length === 0) {
+    renderNoSearchResults();
+    return;
+  }
+  prepareSearchView(true);
   displaySearchPokemon(await fetchSearchPokemon(matches));
 }
 
 function renderNoSearchResults() {
+  setSearchActiveState(true, "Back");
   document.querySelector(".card-grid").innerHTML =
     `<p class="no-results" data-id="not-found">No Pokémon found.</p>`;
 }
@@ -330,6 +341,7 @@ function displaySearchPokemon(pokemonData) {
 }
 
 function showSearchError() {
+  setSearchActiveState(true, "Back");
   document.querySelector(".card-grid").innerHTML =
     `<p class="no-results">Please enter at least 3 characters.</p>`;
 }
