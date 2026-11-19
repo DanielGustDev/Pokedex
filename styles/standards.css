@@ -13,7 +13,6 @@ html {
 body {
     display: flex;
     justify-content: center;
-    align-items: center;
 
     min-height: 100dvh;
 
@@ -77,8 +76,6 @@ button {
     font-family: 'Press Start 2P';
     font-weight: bold;
 
-    text-align: center;
-
     cursor: pointer;
 
     transition: transform 0.05s ease, box-shadow 0.05s ease;
@@ -107,7 +104,6 @@ audio {
 table {
     border-collapse: separate;
     border-spacing: 0;
-    overflow: hidden;
 }
 
 @media (max-width: 676px) {
